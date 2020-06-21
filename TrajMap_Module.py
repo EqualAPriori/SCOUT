@@ -327,11 +327,11 @@ class TrajObj():
                 rsq = np.sum(rsq,axis=1)/np.sum(ResidueMasses[residue.name])
                 if self.WrapTraj: # WrapTrajCoordinates
                     rsq = np.mod(rsq,self.mdTraj.unitcell_lengths)
-                lock.acquire()
+                lock.acquire() # do not let other process write to same array
                 COM_xyz[:,rindx,:] = rsq
                 _cnt.value += 1
                 PBar.Update(_cnt_share.value)
-                lock.release()
+                lock.release() # release this processes hold
                 
         
         # get the number of residues per process
@@ -404,6 +404,10 @@ class TrajObj():
         totaltime = final - start
         self.Write2Log('RunTime:            {}\n'.format(totaltime))      
         
+        print('\n')
+        print('Done Mapping...{0:4.2e} mininutes'.format(totaltime/60.))
+        print('Outputting Trajectories...')
+        
         # Save the mapped trajectories
         COM_xyz = array
         trajCOM = md.Trajectory(COM_xyz,_top2,unitcell_lengths = self.mdTraj.unitcell_lengths, unitcell_angles = self.mdTraj.unitcell_angles)
@@ -411,3 +415,5 @@ class TrajObj():
         trajCOM.save_dcd(os.path.join(self.SaveDirName,"TrajCOM.dcd"))
         _PDB = md.formats.PDBTrajectoryFile(os.path.join(self.SaveDirName,"TrajCOM.pdb"), mode='w', force_overwrite=True, standard_names=True)
         _PDB.write(trajCOM.xyz[0],trajCOM.topology)
+        
+        print('Mapping Complete!')
