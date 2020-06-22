@@ -1,0 +1,1 @@
+These are S(Q)'s calculated with the old S(Q) script before modification to the PLL.

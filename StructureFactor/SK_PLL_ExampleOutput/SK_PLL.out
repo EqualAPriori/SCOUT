@@ -1,0 +1,92 @@
+Parameters: 
+ - Species = -1, -1
+ - Skip frames = 0
+ - stride  = 1
+ - kcutoff = 1.0
+ - trjfile = CGTraj.dcd
+ - topfile = CGTraj.pdb
+ - pruneRes = 0.05
+ - pruneNum = 50
+ - SaveDir = SK_PLL_ExampleOutput
+ - nProcessors = 10
+ - nAtoms = 40000
+Minimum Cell Dimenstions: [179.00575 179.00575 179.00575]
+Setting Lmax to: 179.00575256347656
+Number of Frames: 55
+Preparing k mesh
+0.03510046586324945   179.00575256347656  
+Pruning kmesh because too many...
+104 vecs in current bin (0.06079579024448502,0.11099741906085654), pruning down to 50
+266 vecs in current bin (0.11079579024448502,0.16085054174655408), pruning down to 50
+536 vecs in current bin (0.16079579024448504,0.2135077985489855), pruning down to 50
+818 vecs in current bin (0.21079579024448503,0.26266783475286776), pruning down to 50
+1202 vecs in current bin (0.260795790244485,0.3139481108485464), pruning down to 50
+1608 vecs in current bin (0.310795790244485,0.36138141430435633), pruning down to 50
+2114 vecs in current bin (0.360795790244485,0.41084041965579304), pruning down to 50
+2792 vecs in current bin (0.410795790244485,0.4616745474469707), pruning down to 50
+3506 vecs in current bin (0.46079579024448497,0.5110704972987911), pruning down to 50
+4106 vecs in current bin (0.510795790244485,0.5616074538119912), pruning down to 50
+4778 vecs in current bin (0.560795790244485,0.611997534276414), pruning down to 50
+4308 vecs in current bin (0.610795790244485,0.6613434507539064), pruning down to 50
+3692 vecs in current bin (0.6607957902444851,0.7115964806467527), pruning down to 50
+2780 vecs in current bin (0.7107957902444851,0.7609599666172037), pruning down to 50
+1868 vecs in current bin (0.7607957902444852,0.8111170099550081), pruning down to 50
+920 vecs in current bin (0.8107957902444852,0.8612140893517234), pruning down to 50
+360 vecs in current bin (0.8607957902444853,0.9119368536672753), pruning down to 50
+152 vecs in current bin (0.9107957902444853,0.9727326439117603), pruning down to 50
+Originally had 35937 vecs, pruned down to 927.
+At most 50 vectors in each of the following 20 bins [0, 0.06079579024448502, 0.11079579024448502, 0.16079579024448504, 0.21079579024448503, 0.260795790244485, 0.310795790244485, 0.360795790244485, 0.410795790244485, 0.46079579024448497, 0.510795790244485, 0.560795790244485, 0.610795790244485, 0.6607957902444851, 0.7107957902444851, 0.7607957902444852, 0.8107957902444852, 0.8607957902444853, 0.9107957902444853, 0.9727326439117603]
+Generating histogram mapping
+
+
+Threading Report:
+Number Cores:          40
+Total Number Frames:   55
+nPerThread:            [5, 5, 5, 5, 5, 5, 5, 5, 5, 10]
+Starting Loop and Calculations
+
+
+Process 0 has 5 frames.
+Range of Frames:
+[0 1 2 3 4]
+
+Process 1 has 5 frames.
+Range of Frames:
+[5 6 7 8 9]
+
+Process 2 has 5 frames.
+Range of Frames:
+[10 11 12 13 14]
+
+Process 3 has 5 frames.
+Range of Frames:
+[15 16 17 18 19]
+
+Process 4 has 5 frames.
+Range of Frames:
+[20 21 22 23 24]
+
+Process 5 has 5 frames.
+Range of Frames:
+[25 26 27 28 29]
+
+Process 6 has 5 frames.
+Range of Frames:
+[30 31 32 33 34]
+
+Process 7 has 5 frames.
+Range of Frames:
+[35 36 37 38 39]
+
+Process 8 has 5 frames.
+Range of Frames:
+[40 41 42 43 44]
+
+Process 9 has 10 frames.
+Range of Frames:
+[45 46 47 48 49 50 51 52 53 54]
+
+
+
+Done w/ S(Q)...Runtime: 2.33e+00 minutes
+Outputting Final Stats...
