@@ -423,6 +423,7 @@ if __name__ == "__main__":
     parser.add_argument('--pruneNum', action='store',type=int, default = 50, help = 'max number of wave vectors for each pruned bin')
     parser.add_argument('-d', '--SaveDir', action='store',type=str,default='SK',help='save directory for outputs')
     parser.add_argument('-np', '--nProcessors', action='store',type=int,default=1,help='Number of processors to pll frames across')
+    parser.add_argument('-ch', '--perchain', action='store_true',help='whether to calculate on per-chain basis, default False')
     
     sphcut = True # Use a spherical kmesh
     args = parser.parse_args()
@@ -555,7 +556,6 @@ if __name__ == "__main__":
     else:
         SK = np.zeros([1,1,nk3d])
     
-    SKtotal = mp.Value('i',0) # Shared counter
 
 
     # === Loop ===
@@ -565,7 +565,7 @@ if __name__ == "__main__":
     #for iframe,frame in enumerate(traj):
     
     def CalcSK(frames,SK,pID,typedict,kmesh3d,nspec,histabcissae,fullMatrix,histmapper,
-                histndegen,spec1,spec2,PBar,nk3d,SaveDir,lock):
+                histndegen,spec1,spec2,PBar,nk3d,SaveDir,lock,SKtotal,chain=None):
         
         # === Initialize the structure factor ===
         if fullMatrix:
@@ -578,7 +578,11 @@ if __name__ == "__main__":
         top = frames.topology
         SKnavg = 0
         
-        p_log = open(os.path.join(SaveDir,"Log_pID_{}.dat".format(pID)),"w")
+        if chain is None:
+            suffix = ''
+        elif type(chain) is int:
+            suffix = '_ch{}'.format(chain)
+        p_log = open(os.path.join(SaveDir,"Log_pID_{}{}.dat".format(pID,suffix)),"w")
         p_log.close()
         
         _start = time.time()
@@ -612,7 +616,7 @@ if __name__ == "__main__":
             SKtotal.value += 1
             PBar.Update(SKtotal.value)
             lock.release() # release this processes hold
-            skfile = open(os.path.join(SaveDir,"sk_pID_{}.dat".format(pID)),"w")
+            skfile = open(os.path.join(SaveDir,"sk_pID_{}{}.dat".format(pID,suffix)),"w")
             
             if fullMatrix:
                 skfile.write("# |k|")
@@ -651,7 +655,7 @@ if __name__ == "__main__":
 
             skfile.close()
             
-            p_log = open(os.path.join(SaveDir,"Log_pID_{}.dat".format(pID)),"a")
+            p_log = open(os.path.join(SaveDir,"Log_pID_{}{}.dat".format(pID,suffix)),"a")
             p_log.write('Frame {}'.format(iframe))
             p_log.write( ' Average time / frame: {}\n'.format((time.time() - _start) / (iframe+1)) )
             p_log.close()
@@ -660,46 +664,60 @@ if __name__ == "__main__":
     PBar = ProgressBar('S(Q) Progress:', Steps = (int(traj.n_frames)), BarLen = 20, UpdateFreq = 1.)
     
     # Split up the residues onto the different processes 
-    start = time.time()
-    _npt_current = 0
-    Verbose = True # for troubleshooting how frames are allocated to processors
-    temp_range = []
-    processes = []
-    # setup list of processes
-    for _i in range(_nThreads): 
-        _npt = _nPerThread[_i] 
-        _range = np.linspace(_npt_current,_npt_current+_npt-1,_npt,dtype='int64')
-        _npt_current += _npt
-        _frames = traj.slice(_range)
-        
-        if Verbose: # for troubleshooting
-            if _i == 0:
-                print("\n")
-            print('Process {} has {} frames.'.format(_i,_frames.n_frames))
-            print('Range of Frames:')
-            print('{}\n'.format(_range))
-        
-        temp_range.append(_range)
-        pID = _i
-        _p = mp.Process(target=CalcSK, args=(_frames,SK,pID,typedict,kmesh3d,nspec,histabcissae,fullMatrix,
-                        histmapper,histndegen,args.spec1,args.spec2,PBar,nk3d,SaveDir,lock))
-        
-        processes.append(_p)
+    # Loop over chains if needed
+    def CalcSK_PLL(traj_chain,chain=None):
+        print('n_atoms in slice: {}'.format(traj_chain.n_atoms))
+        start = time.time()
+        _npt_current = 0
+        Verbose = True # for troubleshooting how frames are allocated to processors
+        temp_range = []
+        processes = []
 
-    # start all processes
-    for process in processes:
-        process.start() 
-     
-    # wait for all processes to finish
-    for process in processes:
-        process.join()   
-    
-    final = time.time()
-    totaltime = final - start
-    print('\n')
-    print('Done w/ S(Q)...Runtime: {0:4.2e} minutes'.format(totaltime/60.))
-    print('Outputting Final Stats...')
-    
+        # setup list of processes
+        SKtotal = mp.Value('i',0) # Shared counter
+        for _i in range(_nThreads): 
+            _npt = _nPerThread[_i] 
+            _range = np.linspace(_npt_current,_npt_current+_npt-1,_npt,dtype='int64')
+            _npt_current += _npt
+            _frames = traj_chain.slice(_range)
+            
+            if Verbose: # for troubleshooting
+                if _i == 0:
+                    print("\n")
+                print('Process {} has {} frames.'.format(_i,_frames.n_frames))
+                print('Range of Frames:')
+                print('{}\n'.format(_range))
+            
+            temp_range.append(_range)
+            pID = _i
+            _p = mp.Process(target=CalcSK, args=(_frames,SK,pID,typedict,kmesh3d,nspec,histabcissae,fullMatrix,
+                            histmapper,histndegen,args.spec1,args.spec2,PBar,nk3d,SaveDir,lock,SKtotal,chain))
+            
+            processes.append(_p)
+
+        # start all processes
+        for process in processes:
+            process.start() 
+         
+        # wait for all processes to finish
+        for process in processes:
+            process.join()   
+        
+        final = time.time()
+        totaltime = final - start
+        print('\n')
+        print('Done w/ S(Q)...Runtime: {0:4.2e} minutes'.format(totaltime/60.))
+        print('Outputting Final Stats...')
+        
+    if args.perchain is False:
+        CalcSK_PLL(traj)
+    else:
+        for chainid,chain in enumerate(traj.topology.chains):
+            print('=== Working on chain {} ==='.format(chainid))
+            atomids = traj.topology.select('chainid {}'.format(chainid))
+            print(atomids)
+            traj_chain = traj.atom_slice(atomids)
+            CalcSK_PLL(traj_chain,chainid)
     PBar.Clear()
     
     # === Print out degeneracies, so that we can average different wave-vector points together === #
@@ -707,7 +725,14 @@ if __name__ == "__main__":
     np.savetxt('sk.metadat', metadata.T)
     
     ''' Recombine all the S(Q) files, i.e., average them '''
-    if _nThreads > 1:
+    def combine_SK(chainid=None):
+        if chainid is None:
+            suffix = ''
+        elif type(chainid) is int:
+            suffix = '_ch{}'.format(chainid)
+        else: 
+            raise ValueError('chaind {} has type {} is unsupported'.format(chainid, type(chainid)))
+
         header = ''
         if fullMatrix: # get the file header 
             header += "# |k|"
@@ -722,7 +747,7 @@ if __name__ == "__main__":
                 header += " S{}{}(k)\n".format(spec1,spec2)
         
         for _i in range(_nThreads):
-            _temp = np.loadtxt(os.path.join(SaveDir,"sk_pID_{}.dat".format(_i)),comments='#')
+            _temp = np.loadtxt(os.path.join(SaveDir,"sk_pID_{}{}.dat".format(_i,suffix)),comments='#')
             if _i == 0:
                 magK = _temp[:,0] # get the K magnitude, i.e., histabcissae
                 _SQ_data = np.zeros(_temp[:,1:].shape)               
@@ -730,9 +755,25 @@ if __name__ == "__main__":
             
         _SQ_data = _SQ_data/np.sum(_nPerThread)
         
-        np.savetxt(os.path.join(SaveDir,"sk_total.dat"),np.column_stack((magK,_SQ_data)),header=header)
+        np.savetxt(os.path.join(SaveDir,"sk_total{}.dat".format(suffix)),np.column_stack((magK,_SQ_data)),header=header)
+        return(header,suffix)
             
-            
+    if args.perchain is False:
+        if _nThreads > 1:
+            combine_SK()
+    else:
+        for chainid,chain in enumerate(traj.topology.chains):
+            header,suffix = combine_SK(chainid)
+            data_tmp = np.loadtxt(os.path.join(SaveDir,"sk_total{}.dat".format(suffix)))
+            if chainid == 0:
+                data = data_tmp * chain.n_atoms
+            else:
+                data += data_tmp * chain.n_atoms
+
+        #assuming single chain type averaging. Otherwise, should weigh by # atoms in each chain
+        data /= traj.n_atoms
+        np.savetxt(os.path.join(SaveDir,"sk_total_perchain.dat"),data,header=header)
+
         
             
     

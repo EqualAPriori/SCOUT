@@ -177,10 +177,11 @@ class TrajObj():
        
        # setup topology file for COM trajectory
         _top2 = md.Topology()
-        for rindx, residue in enumerate(self.mdTraj.topology.residues):
+        for chindx, chain in enumerate(self.mdTraj.topology.chains):
             _top2.add_chain()
-            _top2.add_residue(residue.name,_top2.chain(-1))
-            _top2.add_atom("P",md.element.carbon,_top2.residue(-1))
+            for rindx, residue in enumerate(chain.residues):
+                _top2.add_residue(residue.name,_top2.chain(-1))
+                _top2.add_atom(residue.name[:3],md.element.carbon,_top2.residue(-1))
         
         start = time.time()
         # setup np matrix to hold the mapped coordinates
@@ -226,7 +227,7 @@ class TrajObj():
         for rindx, residue in enumerate(self.mdTraj.topology.residues):
             _top2.add_chain()
             _top2.add_residue(residue.name,_top2.chain(-1))
-            _top2.add_atom("P",md.element.carbon,_top2.residue(-1))
+            _top2.add_atom(residue.name[:3],md.element.carbon,_top2.residue(-1))
         
         # setup np matrix to hold the mapped coordinates
         COM_xyz = np.zeros((int(self.mdTraj.n_frames),int(self.mdTraj.n_residues),3))
@@ -306,11 +307,12 @@ class TrajObj():
         
         # setup topology file for COM trajectory
         _top2 = md.Topology()
-        for rindx, residue in enumerate(self.mdTraj.topology.residues):
+        for chindx, chain in enumerate(self.mdTraj.topology.chains):
             _top2.add_chain()
-            _top2.add_residue(residue.name,_top2.chain(-1))
-            _top2.add_atom("P",md.element.carbon,_top2.residue(-1))
-        
+            for rindx, residue in enumerate(chain.residues):
+                _top2.add_residue(residue.name,_top2.chain(-1))
+                _top2.add_atom(residue.name[:3],md.element.carbon,_top2.residue(-1))
+            
         # setup np matrix to hold the mapped coordinates
         COM_xyz = np.zeros((int(self.mdTraj.n_frames),int(self.mdTraj.n_residues),3))
         _cnt = 0
