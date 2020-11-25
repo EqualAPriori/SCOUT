@@ -17,6 +17,7 @@ stride  = 10
 
 # SQ Calculation Stuff
 WaitForSQ = False
+per_chain = False
 kmax = 2
 PruneRes = 0.1
 PruneNum = 50 
@@ -52,6 +53,8 @@ traj.save_dcd("CGTraj.dcd")
 ''' Run SQ calculation '''
 print('Running S(Q)')
 call_1 = "nohup python SK_PLL.py -t CGTraj.dcd -p CGTraj.pdb -m {} --pruneRes {} ".format(kmax,PruneRes)
+if per_chain:
+    call_1 += "--perchain "
 call_1 += "--pruneNum {} -d {} -s {} -w {} -np {} > SKCalc.out &".format(PruneNum,SQSaveName,_Stride,_Warmup,nProcessors)	
 
 p1 = prcs.Popen(call_1, stdout=prcs.PIPE, shell=True)	
