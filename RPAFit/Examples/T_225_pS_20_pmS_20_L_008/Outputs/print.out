@@ -1,0 +1,1105 @@
+************************************
+Running omega test for AB-diblock...
+************************************
+Length of Sq_Data in Fit-range 0.0100 to 5.0000: 4990
+*** Fitting Diblock. ***
+Species A Params: {'species': 'A', 'Rg': 0.894427190999916, 'Phi': 0.5, 'Vseg': 0.2, 'Nseg': 20}
+Species B Params: {'species': 'B', 'Rg': 0.894427190999916, 'Phi': 0.5, 'Vseg': 0.2, 'Nseg': 20}
+Chi_Fit:     [0.05]
+Chi/Vo:      [0.5]
+Cost Func:   1.7078719731663847e-23
+Message:     `gtol` termination condition is satisfied.
+# Cost Iter: 8
+*** Fitting Diblock. ***
+Species A Params: {'species': 'A', 'Rg': 0.894427190999916, 'Phi': 0.5, 'Vseg': 0.2, 'Nseg': 20}
+Species B Params: {'species': 'B', 'Rg': 0.894427190999916, 'Phi': 0.5, 'Vseg': 0.2, 'Nseg': 20}
+Chi_Fit:     [ 5.00000000e-02 -1.04775721e-17  2.23725466e-18]
+Chi/Vo:      [ 5.00000000e-01 -1.04775721e-16  2.23725466e-17]
+Cost Func:   1.7078763749563098e-23
+Message:     `xtol` termination condition is satisfied.
+# Cost Iter: 6
+*** Fitting Non-Linear Chi ***
+q*:     1.54
+S(q*):  0.6158688669062651
+chimax: 0.05
+--- Fitting S(q*) ---
+Chi_Fit:     [0.05]
+Chi/Vo:      [0.5]
+Cost Func:   6.162975822039155e-33
+Message:     `gtol` termination condition is satisfied.
+# Cost Iter: 1
+Length of Sq_Data in Fit-range 0.0100 to 5.0000: 4990
+Loading in Omega Data...
+Number of Omega pair correlations: 4
+*** Fitting Diblock. ***
+Species A Params: {'species': 'A', 'Rg': 0.894427190999916, 'Phi': 0.5, 'Vseg': 0.2, 'Nseg': 20}
+Species B Params: {'species': 'B', 'Rg': 0.894427190999916, 'Phi': 0.5, 'Vseg': 0.2, 'Nseg': 20}
+Chi_Fit:     [0.05]
+Chi/Vo:      [0.5]
+Cost Func:   5.091336669183857e-29
+Message:     `gtol` termination condition is satisfied.
+# Cost Iter: 8
+************************************
+Results of omega test...
+************************************
+Set Chi:  0.05
+Fit Chi:  0.05
+Omega Test Passed!
+************************************
+End of omega test for AB-diblock...
+************************************
+**********************************************
+Running InvSqNc vs ChiN test for AB-diblock...
+**********************************************
+************************************
+Results of SqInvNc vs ChiN test...
+************************************
+Test yint:         10.494869341384215
+Test yval @ 10.495:  -0.00013065861578520632
+Corr. yint:         10.495
+Corr. yval @ 10.495:  0.0
+SqInvNc vs ChiN Test Passed!
+************************************
+End of SqInvNc vs ChiN test...
+************************************
+**********************************************
+Running SqPeakFitTest test for AB-diblock...
+**********************************************
+Rg0: 2.5126283715132516
+*** Fitting Diblock. ***
+Species A Params: {'species': 'A', 'Rg': 1.776696560098732, 'Phi': 0.5, 'Vseg': 1, 'Nseg': 16.0}
+Species B Params: {'species': 'B', 'Rg': 1.776696560098732, 'Phi': 0.5, 'Vseg': 1, 'Nseg': 16.0}
+Chi_Fit:     [0.225084]
+Chi/Vo:      [0.225084]
+Cost Func:   0.0
+Message:     `gtol` termination condition is satisfied.
+# Cost Iter: 9
+*** Fitting Diblock. ***
+Species A Params: {'species': 'A', 'Rg': 1.776696560098732, 'Phi': 0.5, 'Vseg': 1, 'Nseg': 16.0}
+Species B Params: {'species': 'B', 'Rg': 1.776696560098732, 'Phi': 0.5, 'Vseg': 1, 'Nseg': 16.0}
+Chi_Fit:     [0.29927848]
+Chi/Vo:      [0.29927848]
+Cost Func:   7.636173562539394e-28
+Message:     `xtol` termination condition is satisfied.
+# Cost Iter: 12
+*** Fitting Diblock. ***
+Species A Params: {'species': 'A', 'Rg': 1.776696560098732, 'Phi': 0.5, 'Vseg': 1, 'Nseg': 16.0}
+Species B Params: {'species': 'B', 'Rg': 1.776696560098732, 'Phi': 0.5, 'Vseg': 1, 'Nseg': 16.0}
+Chi_Fit:     [0.31900408]
+Chi/Vo:      [0.31900408]
+Cost Func:   2.394704029212354e-22
+Message:     `xtol` termination condition is satisfied.
+# Cost Iter: 15
+************************************
+Results of SqPeakFitTest test...
+************************************
+Test Chi*N Data:
+[ 7.2027  9.5769 10.2081]
+True Chi*N Data:
+[7.2, 9.59, 10.2]
+|Diff.|/Chi*N between Chi*N Data:
+[0.000373 0.001365 0.000797]
+SqPeakFit Test Passed!
+************************************
+End of SqPeakFitTest test...
+************************************
+Length of Sq_Data in Fit-range 0.7618 to 5.0000: 37
+*** Fitting Diblock. ***
+Species A Params: {'species': 'pS', 'Rg': 0.942, 'Phi': 0.3888622691939986, 'Vseg': 0.12842925, 'Nseg': 20}
+Species B Params: {'species': 'pmS', 'Rg': 0.97, 'Phi': 0.6111377308060014, 'Vseg': 0.20184, 'Nseg': 20}
+Chi_Fit:     [-0.01654987]
+Chi/Vo:      [-0.16549868]
+Cost Func:   0.01842440862389863
+Message:     `ftol` termination condition is satisfied.
+# Cost Iter: 8
+*** Fitting Diblock. ***
+Species A Params: {'species': 'pS', 'Rg': 0.942, 'Phi': 0.3888622691939986, 'Vseg': 0.12842925, 'Nseg': 20}
+Species B Params: {'species': 'pmS', 'Rg': 0.97, 'Phi': 0.6111377308060014, 'Vseg': 0.20184, 'Nseg': 20}
+Chi_Fit:     [ 0.00950171  0.00377512 -0.00201636]
+Chi/Vo:      [ 0.0950171   0.03775125 -0.02016364]
+Cost Func:   0.00020892947531199748
+Message:     `ftol` termination condition is satisfied.
+# Cost Iter: 8
+*** Fitting Non-Linear Chi ***
+q*:     1.3818181198679853
+S(q*):  0.2938830007722037
+chimax: 0.009358574871888424
+--- Fitting S(q*) ---
+Chi_Fit:     [0.00935857]
+Chi/Vo:      [0.09358575]
+Cost Func:   1.3709984991129242e-26
+Message:     `gtol` termination condition is satisfied.
+# Cost Iter: 3
+Length of Sq_Data in Fit-range 0.7618 to 5.0000: 37
+Loading in Omega Data...
+Number of Omega pair correlations: 4
+*** Fitting Diblock. ***
+Species A Params: {'species': 'pS', 'Rg': 0.942, 'Phi': 0.3888622691939986, 'Vseg': 0.12842925, 'Nseg': 20}
+Species B Params: {'species': 'pmS', 'Rg': 0.97, 'Phi': 0.6111377308060014, 'Vseg': 0.20184, 'Nseg': 20}
+Chi_Fit:     [-0.02374395]
+Chi/Vo:      [-0.23743947]
+Cost Func:   0.0007237459298412781
+Message:     Both `ftol` and `xtol` termination conditions are satisfied.
+# Cost Iter: 8
+MD q--> inf. S(q) asymptote:
+0.03238885346986301
+Length of Sq_Data in Fit-range 0.7618 to 5.0000: 37
+*** Fitting Diblock. ***
+Species A Params: {'species': 'pS', 'Rg': 0.942, 'Phi': 0.5307777905207071, 'Vseg': 0.171239, 'Nseg': 20}
+Species B Params: {'species': 'pmS', 'Rg': 0.97, 'Phi': 0.46922220947929294, 'Vseg': 0.15138, 'Nseg': 20}
+Chi_Fit:     [-0.02653901]
+Chi/Vo:      [-0.26539007]
+Cost Func:   0.023536955040699477
+Message:     `ftol` termination condition is satisfied.
+# Cost Iter: 8
+*** Fitting Diblock. ***
+Species A Params: {'species': 'pS', 'Rg': 0.942, 'Phi': 0.5307777905207071, 'Vseg': 0.171239, 'Nseg': 20}
+Species B Params: {'species': 'pmS', 'Rg': 0.97, 'Phi': 0.46922220947929294, 'Vseg': 0.15138, 'Nseg': 20}
+Chi_Fit:     [ 0.00370356  0.00293559 -0.0019738 ]
+Chi/Vo:      [ 0.03703562  0.02935594 -0.01973805]
+Cost Func:   0.000246050776369271
+Message:     `xtol` termination condition is satisfied.
+# Cost Iter: 11
+*** Fitting Non-Linear Chi ***
+q*:     1.3818181198679853
+S(q*):  0.30747152931577904
+chimax: 0.0021125727472160166
+--- Fitting S(q*) ---
+Chi_Fit:     [0.00211257]
+Chi/Vo:      [0.02112573]
+Cost Func:   5.546678239835239e-32
+Message:     `gtol` termination condition is satisfied.
+# Cost Iter: 4
+Length of Sq_Data in Fit-range 0.7618 to 5.0000: 37
+Loading in Omega Data...
+Number of Omega pair correlations: 4
+*** Fitting Diblock. ***
+Species A Params: {'species': 'pS', 'Rg': 0.942, 'Phi': 0.5307777905207071, 'Vseg': 0.171239, 'Nseg': 20}
+Species B Params: {'species': 'pmS', 'Rg': 0.97, 'Phi': 0.46922220947929294, 'Vseg': 0.15138, 'Nseg': 20}
+Chi_Fit:     [-0.03062954]
+Chi/Vo:      [-0.30629538]
+Cost Func:   0.0010515330036214578
+Message:     `ftol` termination condition is satisfied.
+# Cost Iter: 7
+MD q--> inf. S(q) asymptote:
+0.033943136744114324
+Length of Sq_Data in Fit-range 0.7618 to 5.0000: 37
+*** Fitting Diblock. ***
+Species A Params: {'species': 'pS', 'Rg': 0.942, 'Phi': 0.45898857882646843, 'Vseg': 0.171239, 'Nseg': 20}
+Species B Params: {'species': 'pmS', 'Rg': 0.97, 'Phi': 0.5410114211735315, 'Vseg': 0.20184, 'Nseg': 20}
+Chi_Fit:     [0.04907325]
+Chi/Vo:      [0.49073248]
+Cost Func:   0.01658318226000395
+Message:     `ftol` termination condition is satisfied.
+# Cost Iter: 8
+*** Fitting Diblock. ***
+Species A Params: {'species': 'pS', 'Rg': 0.942, 'Phi': 0.45898857882646843, 'Vseg': 0.171239, 'Nseg': 20}
+Species B Params: {'species': 'pmS', 'Rg': 0.97, 'Phi': 0.5410114211735315, 'Vseg': 0.20184, 'Nseg': 20}
+Chi_Fit:     [ 0.05433097  0.0009167  -0.00059052]
+Chi/Vo:      [ 0.54330968  0.00916699 -0.00590521]
+Cost Func:   0.002038441768939083
+Message:     `ftol` termination condition is satisfied.
+# Cost Iter: 7
+*** Fitting Non-Linear Chi ***
+q*:     1.4157916586485675
+S(q*):  0.5614282593579104
+chimax: 0.05379581520915559
+--- Fitting S(q*) ---
+Chi_Fit:     [0.05379582]
+Chi/Vo:      [0.53795815]
+Cost Func:   6.162975822039155e-33
+Message:     `gtol` termination condition is satisfied.
+# Cost Iter: 4
+Length of Sq_Data in Fit-range 0.7618 to 5.0000: 37
+Loading in Omega Data...
+Number of Omega pair correlations: 4
+*** Fitting Diblock. ***
+Species A Params: {'species': 'pS', 'Rg': 0.942, 'Phi': 0.45898857882646843, 'Vseg': 0.171239, 'Nseg': 20}
+Species B Params: {'species': 'pmS', 'Rg': 0.97, 'Phi': 0.5410114211735315, 'Vseg': 0.20184, 'Nseg': 20}
+Chi_Fit:     [0.03181021]
+Chi/Vo:      [0.31810212]
+Cost Func:   0.008454181170813292
+Message:     `xtol` termination condition is satisfied.
+# Cost Iter: 8
+MD q--> inf. S(q) asymptote:
+0.06016535131598916
+Length of Sq_Data in Fit-range 0.7618 to 5.0000: 37
+*** Fitting Diblock. ***
+Species A Params: {'species': 'pS', 'Rg': 0.7064999999999999, 'Phi': 0.45898857882646843, 'Vseg': 0.171239, 'Nseg': 20}
+Species B Params: {'species': 'pmS', 'Rg': 0.97, 'Phi': 0.5410114211735315, 'Vseg': 0.20184, 'Nseg': 20}
+Chi_Fit:     [-0.02043128]
+Chi/Vo:      [-0.20431279]
+Cost Func:   0.07791306082842636
+Message:     `ftol` termination condition is satisfied.
+# Cost Iter: 9
+*** Fitting Diblock. ***
+Species A Params: {'species': 'pS', 'Rg': 0.7064999999999999, 'Phi': 0.45898857882646843, 'Vseg': 0.171239, 'Nseg': 20}
+Species B Params: {'species': 'pmS', 'Rg': 0.97, 'Phi': 0.5410114211735315, 'Vseg': 0.20184, 'Nseg': 20}
+Chi_Fit:     [ 0.05074604 -0.01026897 -0.00095853]
+Chi/Vo:      [ 0.5074604  -0.10268967 -0.00958534]
+Cost Func:   0.000796516966517205
+Message:     `ftol` termination condition is satisfied.
+# Cost Iter: 8
+*** Fitting Non-Linear Chi ***
+q*:     1.3988048892582763
+S(q*):  0.419083461569414
+chimax: 0.026983466465816088
+--- Fitting S(q*) ---
+Chi_Fit:     [0.02698347]
+Chi/Vo:      [0.26983466]
+Cost Func:   1.5407439555097887e-33
+Message:     `gtol` termination condition is satisfied.
+# Cost Iter: 6
+Length of Sq_Data in Fit-range 0.7618 to 5.0000: 37
+Loading in Omega Data...
+Number of Omega pair correlations: 4
+*** Fitting Diblock. ***
+Species A Params: {'species': 'pS', 'Rg': 0.7064999999999999, 'Phi': 0.45898857882646843, 'Vseg': 0.171239, 'Nseg': 20}
+Species B Params: {'species': 'pmS', 'Rg': 0.97, 'Phi': 0.5410114211735315, 'Vseg': 0.20184, 'Nseg': 20}
+Chi_Fit:     [-0.00367232]
+Chi/Vo:      [-0.03672315]
+Cost Func:   0.00043076449959600463
+Message:     `ftol` termination condition is satisfied.
+# Cost Iter: 5
+MD q--> inf. S(q) asymptote:
+0.04512401348699187
+Length of Sq_Data in Fit-range 0.7618 to 5.0000: 37
+*** Fitting Diblock. ***
+Species A Params: {'species': 'pS', 'Rg': 0.942, 'Phi': 0.45898857882646843, 'Vseg': 0.171239, 'Nseg': 20}
+Species B Params: {'species': 'pmS', 'Rg': 0.7275, 'Phi': 0.5410114211735315, 'Vseg': 0.20184, 'Nseg': 20}
+Chi_Fit:     [-0.01028711]
+Chi/Vo:      [-0.1028711]
+Cost Func:   0.06686796795351903
+Message:     `ftol` termination condition is satisfied.
+# Cost Iter: 8
+*** Fitting Diblock. ***
+Species A Params: {'species': 'pS', 'Rg': 0.942, 'Phi': 0.45898857882646843, 'Vseg': 0.171239, 'Nseg': 20}
+Species B Params: {'species': 'pmS', 'Rg': 0.7275, 'Phi': 0.5410114211735315, 'Vseg': 0.20184, 'Nseg': 20}
+Chi_Fit:     [ 0.05299654 -0.00963521 -0.00091173]
+Chi/Vo:      [ 0.52996544 -0.09635207 -0.0091173 ]
+Cost Func:   0.0008795320412302112
+Message:     `xtol` termination condition is satisfied.
+# Cost Iter: 11
+*** Fitting Non-Linear Chi ***
+q*:     1.4072982739534219
+S(q*):  0.41962361889635336
+chimax: 0.030338018410591742
+--- Fitting S(q*) ---
+Chi_Fit:     [0.03033802]
+Chi/Vo:      [0.30338018]
+Cost Func:   1.5407439555097887e-33
+Message:     `gtol` termination condition is satisfied.
+# Cost Iter: 6
+Length of Sq_Data in Fit-range 0.7618 to 5.0000: 37
+Loading in Omega Data...
+Number of Omega pair correlations: 4
+*** Fitting Diblock. ***
+Species A Params: {'species': 'pS', 'Rg': 0.942, 'Phi': 0.45898857882646843, 'Vseg': 0.171239, 'Nseg': 20}
+Species B Params: {'species': 'pmS', 'Rg': 0.7275, 'Phi': 0.5410114211735315, 'Vseg': 0.20184, 'Nseg': 20}
+Chi_Fit:     [-0.00367232]
+Chi/Vo:      [-0.03672315]
+Cost Func:   0.00043076449959600463
+Message:     `ftol` termination condition is satisfied.
+# Cost Iter: 5
+MD q--> inf. S(q) asymptote:
+0.04512401348699187
+Length of Sq_Data in Fit-range 0.7618 to 3.7500: 21
+*** Fitting Diblock. ***
+Species A Params: {'species': 'pS', 'Rg': 0.942, 'Phi': 0.45898857882646843, 'Vseg': 0.171239, 'Nseg': 20}
+Species B Params: {'species': 'pmS', 'Rg': 0.97, 'Phi': 0.5410114211735315, 'Vseg': 0.20184, 'Nseg': 20}
+Chi_Fit:     [0.00926074]
+Chi/Vo:      [0.09260743]
+Cost Func:   0.013769855641720494
+Message:     `ftol` termination condition is satisfied.
+# Cost Iter: 6
+*** Fitting Diblock. ***
+Species A Params: {'species': 'pS', 'Rg': 0.942, 'Phi': 0.45898857882646843, 'Vseg': 0.171239, 'Nseg': 20}
+Species B Params: {'species': 'pmS', 'Rg': 0.97, 'Phi': 0.5410114211735315, 'Vseg': 0.20184, 'Nseg': 20}
+Chi_Fit:     [ 0.02320415  0.00185245 -0.00129833]
+Chi/Vo:      [ 0.23204147  0.01852451 -0.01298326]
+Cost Func:   0.000350221061075787
+Message:     Both `ftol` and `xtol` termination conditions are satisfied.
+# Cost Iter: 7
+*** Fitting Non-Linear Chi ***
+q*:     1.390311504563131
+S(q*):  0.4129235580329933
+chimax: 0.0219338620568768
+--- Fitting S(q*) ---
+Chi_Fit:     [0.02193386]
+Chi/Vo:      [0.21933862]
+Cost Func:   2.603857284811543e-31
+Message:     `gtol` termination condition is satisfied.
+# Cost Iter: 4
+Length of Sq_Data in Fit-range 0.7618 to 3.7500: 21
+Loading in Omega Data...
+Number of Omega pair correlations: 4
+*** Fitting Diblock. ***
+Species A Params: {'species': 'pS', 'Rg': 0.942, 'Phi': 0.45898857882646843, 'Vseg': 0.171239, 'Nseg': 20}
+Species B Params: {'species': 'pmS', 'Rg': 0.97, 'Phi': 0.5410114211735315, 'Vseg': 0.20184, 'Nseg': 20}
+Chi_Fit:     [-0.00366714]
+Chi/Vo:      [-0.03667136]
+Cost Func:   0.0004226857179289024
+Message:     `ftol` termination condition is satisfied.
+# Cost Iter: 5
+MD q--> inf. S(q) asymptote:
+0.04512401348699187
+Length of Sq_Data in Fit-range 0.7618 to 5.0000: 37
+*** Fitting Diblock. ***
+Species A Params: {'species': 'pS', 'Rg': 0.942, 'Phi': 0.43296219101791217, 'Vseg': 0.1541151, 'Nseg': 20}
+Species B Params: {'species': 'pmS', 'Rg': 0.97, 'Phi': 0.5670378089820878, 'Vseg': 0.20184, 'Nseg': 20}
+Chi_Fit:     [-0.00170687]
+Chi/Vo:      [-0.01706871]
+Cost Func:   0.025059856651696723
+Message:     `ftol` termination condition is satisfied.
+# Cost Iter: 7
+*** Fitting Diblock. ***
+Species A Params: {'species': 'pS', 'Rg': 0.942, 'Phi': 0.43296219101791217, 'Vseg': 0.1541151, 'Nseg': 20}
+Species B Params: {'species': 'pmS', 'Rg': 0.97, 'Phi': 0.5670378089820878, 'Vseg': 0.20184, 'Nseg': 20}
+Chi_Fit:     [ 0.01895677  0.00212553 -0.00149764]
+Chi/Vo:      [ 0.1895677   0.02125534 -0.01497638]
+Cost Func:   0.0002817502556668578
+Message:     `xtol` termination condition is satisfied.
+# Cost Iter: 9
+*** Fitting Non-Linear Chi ***
+q*:     1.3818181198679853
+S(q*):  0.36620695186378494
+chimax: 0.01755508695346769
+--- Fitting S(q*) ---
+Chi_Fit:     [0.01755509]
+Chi/Vo:      [0.17555087]
+Cost Func:   1.2480026039629288e-31
+Message:     `gtol` termination condition is satisfied.
+# Cost Iter: 4
+Length of Sq_Data in Fit-range 0.7618 to 5.0000: 37
+Loading in Omega Data...
+Number of Omega pair correlations: 4
+*** Fitting Diblock. ***
+Species A Params: {'species': 'pS', 'Rg': 0.942, 'Phi': 0.43296219101791217, 'Vseg': 0.1541151, 'Nseg': 20}
+Species B Params: {'species': 'pmS', 'Rg': 0.97, 'Phi': 0.5670378089820878, 'Vseg': 0.20184, 'Nseg': 20}
+Chi_Fit:     [-0.01064619]
+Chi/Vo:      [-0.10646188]
+Cost Func:   0.0005670272228538787
+Message:     `ftol` termination condition is satisfied.
+# Cost Iter: 6
+MD q--> inf. S(q) asymptote:
+0.040151697226422534
+Length of Sq_Data in Fit-range 0.7618 to 5.0000: 37
+*** Fitting Diblock. ***
+Species A Params: {'species': 'pS', 'Rg': 0.942, 'Phi': 0.4852406523186784, 'Vseg': 0.171239, 'Nseg': 20}
+Species B Params: {'species': 'pmS', 'Rg': 0.97, 'Phi': 0.5147593476813216, 'Vseg': 0.18165599999999998, 'Nseg': 20}
+Chi_Fit:     [-0.00511763]
+Chi/Vo:      [-0.05117626]
+Cost Func:   0.027636409705273406
+Message:     `ftol` termination condition is satisfied.
+# Cost Iter: 7
+*** Fitting Diblock. ***
+Species A Params: {'species': 'pS', 'Rg': 0.942, 'Phi': 0.4852406523186784, 'Vseg': 0.171239, 'Nseg': 20}
+Species B Params: {'species': 'pmS', 'Rg': 0.97, 'Phi': 0.5147593476813216, 'Vseg': 0.18165599999999998, 'Nseg': 20}
+Chi_Fit:     [ 0.01687226  0.001853   -0.0014876 ]
+Chi/Vo:      [ 0.16872255  0.01852998 -0.01487598]
+Cost Func:   0.00029363517313029216
+Message:     `xtol` termination condition is satisfied.
+# Cost Iter: 10
+*** Fitting Non-Linear Chi ***
+q*:     1.3818181198679853
+S(q*):  0.3723585310317227
+chimax: 0.014986790710428131
+--- Fitting S(q*) ---
+Chi_Fit:     [0.01498679]
+Chi/Vo:      [0.14986791]
+Cost Func:   2.465190328815662e-30
+Message:     `gtol` termination condition is satisfied.
+# Cost Iter: 4
+Length of Sq_Data in Fit-range 0.7618 to 5.0000: 37
+Loading in Omega Data...
+Number of Omega pair correlations: 4
+*** Fitting Diblock. ***
+Species A Params: {'species': 'pS', 'Rg': 0.942, 'Phi': 0.4852406523186784, 'Vseg': 0.171239, 'Nseg': 20}
+Species B Params: {'species': 'pmS', 'Rg': 0.97, 'Phi': 0.5147593476813216, 'Vseg': 0.18165599999999998, 'Nseg': 20}
+Chi_Fit:     [-0.01309316]
+Chi/Vo:      [-0.13093162]
+Cost Func:   0.0006767818325593303
+Message:     `ftol` termination condition is satisfied.
+# Cost Iter: 6
+MD q--> inf. S(q) asymptote:
+0.0408510606601418
+Length of Sq_Data in Fit-range 0.7618 to 5.0000: 37
+*** Fitting Diblock. ***
+Species A Params: {'species': 'pS', 'Rg': 0.942, 'Phi': 0.45898857882646843, 'Vseg': 0.171239, 'Nseg': 20}
+Species B Params: {'species': 'pmS', 'Rg': 0.97, 'Phi': 0.5410114211735315, 'Vseg': 0.20184, 'Nseg': 20}
+Chi_Fit:     [0.02410078]
+Chi/Vo:      [0.24100778]
+Cost Func:   0.02460084743774065
+Message:     `ftol` termination condition is satisfied.
+# Cost Iter: 8
+*** Fitting Diblock. ***
+Species A Params: {'species': 'pS', 'Rg': 0.942, 'Phi': 0.45898857882646843, 'Vseg': 0.171239, 'Nseg': 20}
+Species B Params: {'species': 'pmS', 'Rg': 0.97, 'Phi': 0.5410114211735315, 'Vseg': 0.20184, 'Nseg': 20}
+Chi_Fit:     [ 0.03623235  0.001166   -0.00098041]
+Chi/Vo:      [ 0.36232349  0.01166004 -0.00980415]
+Cost Func:   0.000597741786715995
+Message:     `xtol` termination condition is satisfied.
+# Cost Iter: 8
+*** Fitting Non-Linear Chi ***
+q*:     1.3988048892582763
+S(q*):  0.46214314534170226
+chimax: 0.03476029936406019
+--- Fitting S(q*) ---
+Chi_Fit:     [0.0347603]
+Chi/Vo:      [0.34760299]
+Cost Func:   3.549874073494553e-30
+Message:     `gtol` termination condition is satisfied.
+# Cost Iter: 4
+Length of Sq_Data in Fit-range 0.7618 to 5.0000: 37
+Loading in Omega Data...
+Number of Omega pair correlations: 4
+*** Fitting Diblock. ***
+Species A Params: {'species': 'pS', 'Rg': 0.942, 'Phi': 0.45898857882646843, 'Vseg': 0.171239, 'Nseg': 20}
+Species B Params: {'species': 'pmS', 'Rg': 0.97, 'Phi': 0.5410114211735315, 'Vseg': 0.20184, 'Nseg': 20}
+Chi_Fit:     [0.01089815]
+Chi/Vo:      [0.10898147]
+Cost Func:   0.0009377338704778949
+Message:     Both `ftol` and `xtol` termination conditions are satisfied.
+# Cost Iter: 6
+MD q--> inf. S(q) asymptote:
+0.0501377927633243
+Length of Sq_Data in Fit-range 0.7618 to 5.0000: 37
+*** Fitting Diblock. ***
+Species A Params: {'species': 'pS', 'Rg': 0.8477999999999999, 'Phi': 0.45898857882646843, 'Vseg': 0.171239, 'Nseg': 20}
+Species B Params: {'species': 'pmS', 'Rg': 0.97, 'Phi': 0.5410114211735315, 'Vseg': 0.20184, 'Nseg': 20}
+Chi_Fit:     [-0.00333603]
+Chi/Vo:      [-0.03336033]
+Cost Func:   0.045641315037851155
+Message:     `ftol` termination condition is satisfied.
+# Cost Iter: 7
+*** Fitting Diblock. ***
+Species A Params: {'species': 'pS', 'Rg': 0.8477999999999999, 'Phi': 0.45898857882646843, 'Vseg': 0.171239, 'Nseg': 20}
+Species B Params: {'species': 'pmS', 'Rg': 0.97, 'Phi': 0.5410114211735315, 'Vseg': 0.20184, 'Nseg': 20}
+Chi_Fit:     [ 0.03406255 -0.00342753 -0.00113447]
+Chi/Vo:      [ 0.34062551 -0.0342753  -0.01134474]
+Cost Func:   0.00045044148315339115
+Message:     `xtol` termination condition is satisfied.
+# Cost Iter: 8
+*** Fitting Non-Linear Chi ***
+q*:     1.390311504563131
+S(q*):  0.41537239703712164
+chimax: 0.023198450660883718
+--- Fitting S(q*) ---
+Chi_Fit:     [0.02319845]
+Chi/Vo:      [0.23198451]
+Cost Func:   2.465190328815662e-32
+Message:     `gtol` termination condition is satisfied.
+# Cost Iter: 5
+Length of Sq_Data in Fit-range 0.7618 to 5.0000: 37
+Loading in Omega Data...
+Number of Omega pair correlations: 4
+*** Fitting Diblock. ***
+Species A Params: {'species': 'pS', 'Rg': 0.8477999999999999, 'Phi': 0.45898857882646843, 'Vseg': 0.171239, 'Nseg': 20}
+Species B Params: {'species': 'pmS', 'Rg': 0.97, 'Phi': 0.5410114211735315, 'Vseg': 0.20184, 'Nseg': 20}
+Chi_Fit:     [-0.00367232]
+Chi/Vo:      [-0.03672315]
+Cost Func:   0.00043076449959600463
+Message:     `ftol` termination condition is satisfied.
+# Cost Iter: 5
+MD q--> inf. S(q) asymptote:
+0.04512401348699187
+Length of Sq_Data in Fit-range 0.7618 to 5.0000: 37
+*** Fitting Diblock. ***
+Species A Params: {'species': 'pS', 'Rg': 0.942, 'Phi': 0.45898857882646843, 'Vseg': 0.171239, 'Nseg': 20}
+Species B Params: {'species': 'pmS', 'Rg': 0.873, 'Phi': 0.5410114211735315, 'Vseg': 0.20184, 'Nseg': 20}
+Chi_Fit:     [4.83072146e-05]
+Chi/Vo:      [0.00048307]
+Cost Func:   0.042015824341315566
+Message:     `ftol` termination condition is satisfied.
+# Cost Iter: 5
+*** Fitting Diblock. ***
+Species A Params: {'species': 'pS', 'Rg': 0.942, 'Phi': 0.45898857882646843, 'Vseg': 0.171239, 'Nseg': 20}
+Species B Params: {'species': 'pmS', 'Rg': 0.873, 'Phi': 0.5410114211735315, 'Vseg': 0.20184, 'Nseg': 20}
+Chi_Fit:     [ 0.03477138 -0.00308383 -0.00111688]
+Chi/Vo:      [ 0.3477138  -0.03083825 -0.01116884]
+Cost Func:   0.0004640817653549471
+Message:     `xtol` termination condition is satisfied.
+# Cost Iter: 8
+*** Fitting Non-Linear Chi ***
+q*:     1.3988048892582763
+S(q*):  0.41559894281027565
+chimax: 0.024461408966106064
+--- Fitting S(q*) ---
+Chi_Fit:     [0.02446141]
+Chi/Vo:      [0.24461409]
+Cost Func:   1.5407439555097887e-33
+Message:     `gtol` termination condition is satisfied.
+# Cost Iter: 5
+Length of Sq_Data in Fit-range 0.7618 to 5.0000: 37
+Loading in Omega Data...
+Number of Omega pair correlations: 4
+*** Fitting Diblock. ***
+Species A Params: {'species': 'pS', 'Rg': 0.942, 'Phi': 0.45898857882646843, 'Vseg': 0.171239, 'Nseg': 20}
+Species B Params: {'species': 'pmS', 'Rg': 0.873, 'Phi': 0.5410114211735315, 'Vseg': 0.20184, 'Nseg': 20}
+Chi_Fit:     [-0.00367232]
+Chi/Vo:      [-0.03672315]
+Cost Func:   0.00043076449959600463
+Message:     `ftol` termination condition is satisfied.
+# Cost Iter: 5
+MD q--> inf. S(q) asymptote:
+0.04512401348699187
+Length of Sq_Data in Fit-range 0.7618 to 4.5000: 29
+*** Fitting Diblock. ***
+Species A Params: {'species': 'pS', 'Rg': 0.942, 'Phi': 0.45898857882646843, 'Vseg': 0.171239, 'Nseg': 20}
+Species B Params: {'species': 'pmS', 'Rg': 0.97, 'Phi': 0.5410114211735315, 'Vseg': 0.20184, 'Nseg': 20}
+Chi_Fit:     [0.0073372]
+Chi/Vo:      [0.07337199]
+Cost Func:   0.021408273034727393
+Message:     `ftol` termination condition is satisfied.
+# Cost Iter: 7
+*** Fitting Diblock. ***
+Species A Params: {'species': 'pS', 'Rg': 0.942, 'Phi': 0.45898857882646843, 'Vseg': 0.171239, 'Nseg': 20}
+Species B Params: {'species': 'pmS', 'Rg': 0.97, 'Phi': 0.5410114211735315, 'Vseg': 0.20184, 'Nseg': 20}
+Chi_Fit:     [ 0.02374873  0.00147557 -0.00124959]
+Chi/Vo:      [ 0.23748732  0.01475566 -0.01249589]
+Cost Func:   0.00035900669520670116
+Message:     `ftol` termination condition is satisfied.
+# Cost Iter: 7
+*** Fitting Non-Linear Chi ***
+q*:     1.390311504563131
+S(q*):  0.41291734401274627
+chimax: 0.021932039798806584
+--- Fitting S(q*) ---
+Chi_Fit:     [0.02193204]
+Chi/Vo:      [0.2193204]
+Cost Func:   6.509643212028857e-30
+Message:     `gtol` termination condition is satisfied.
+# Cost Iter: 4
+Length of Sq_Data in Fit-range 0.7618 to 4.5000: 29
+Loading in Omega Data...
+Number of Omega pair correlations: 4
+*** Fitting Diblock. ***
+Species A Params: {'species': 'pS', 'Rg': 0.942, 'Phi': 0.45898857882646843, 'Vseg': 0.171239, 'Nseg': 20}
+Species B Params: {'species': 'pmS', 'Rg': 0.97, 'Phi': 0.5410114211735315, 'Vseg': 0.20184, 'Nseg': 20}
+Chi_Fit:     [-0.00366685]
+Chi/Vo:      [-0.03666849]
+Cost Func:   0.00042651262254001995
+Message:     `ftol` termination condition is satisfied.
+# Cost Iter: 5
+MD q--> inf. S(q) asymptote:
+0.04512401348699187
+Length of Sq_Data in Fit-range 0.7618 to 5.0000: 37
+*** Fitting Diblock. ***
+Species A Params: {'species': 'pS', 'Rg': 0.942, 'Phi': 0.45898857882646843, 'Vseg': 0.171239, 'Nseg': 20}
+Species B Params: {'species': 'pmS', 'Rg': 0.97, 'Phi': 0.5410114211735315, 'Vseg': 0.20184, 'Nseg': 20}
+Chi_Fit:     [0.00621192]
+Chi/Vo:      [0.06211923]
+Cost Func:   0.02834998482840201
+Message:     `ftol` termination condition is satisfied.
+# Cost Iter: 7
+*** Fitting Diblock. ***
+Species A Params: {'species': 'pS', 'Rg': 0.942, 'Phi': 0.45898857882646843, 'Vseg': 0.171239, 'Nseg': 20}
+Species B Params: {'species': 'pmS', 'Rg': 0.97, 'Phi': 0.5410114211735315, 'Vseg': 0.20184, 'Nseg': 20}
+Chi_Fit:     [ 0.02363147  0.0015528  -0.00125884]
+Chi/Vo:      [ 0.23631468  0.01552796 -0.0125884 ]
+Cost Func:   0.0003599463718892968
+Message:     `ftol` termination condition is satisfied.
+# Cost Iter: 7
+*** Fitting Non-Linear Chi ***
+q*:     1.390311504563131
+S(q*):  0.4129086527691699
+chimax: 0.021929491004333786
+--- Fitting S(q*) ---
+Chi_Fit:     [0.02192949]
+Chi/Vo:      [0.21929491]
+Cost Func:   3.403503397721123e-30
+Message:     `gtol` termination condition is satisfied.
+# Cost Iter: 4
+Length of Sq_Data in Fit-range 0.7618 to 5.0000: 37
+Loading in Omega Data...
+Number of Omega pair correlations: 4
+*** Fitting Diblock. ***
+Species A Params: {'species': 'pS', 'Rg': 0.942, 'Phi': 0.45898857882646843, 'Vseg': 0.171239, 'Nseg': 20}
+Species B Params: {'species': 'pmS', 'Rg': 0.97, 'Phi': 0.5410114211735315, 'Vseg': 0.20184, 'Nseg': 20}
+Chi_Fit:     [-0.00367232]
+Chi/Vo:      [-0.03672315]
+Cost Func:   0.00043076449959600463
+Message:     `ftol` termination condition is satisfied.
+# Cost Iter: 5
+MD q--> inf. S(q) asymptote:
+0.04512401348699187
+Length of Sq_Data in Fit-range 0.7618 to 5.0000: 37
+*** Fitting Diblock. ***
+Species A Params: {'species': 'pS', 'Rg': 0.942, 'Phi': 0.4827306511561037, 'Vseg': 0.18836290000000003, 'Nseg': 20}
+Species B Params: {'species': 'pmS', 'Rg': 0.97, 'Phi': 0.5172693488438963, 'Vseg': 0.20184, 'Nseg': 20}
+Chi_Fit:     [0.01303811]
+Chi/Vo:      [0.13038107]
+Cost Func:   0.03040935056226895
+Message:     `ftol` termination condition is satisfied.
+# Cost Iter: 7
+*** Fitting Diblock. ***
+Species A Params: {'species': 'pS', 'Rg': 0.942, 'Phi': 0.4827306511561037, 'Vseg': 0.18836290000000003, 'Nseg': 20}
+Species B Params: {'species': 'pmS', 'Rg': 0.97, 'Phi': 0.5172693488438963, 'Vseg': 0.20184, 'Nseg': 20}
+Chi_Fit:     [ 0.02751116  0.00122749 -0.00107325]
+Chi/Vo:      [ 0.2751116   0.01227493 -0.01073248]
+Cost Func:   0.000480085322360687
+Message:     `ftol` termination condition is satisfied.
+# Cost Iter: 7
+*** Fitting Non-Linear Chi ***
+q*:     1.390311504563131
+S(q*):  0.4581526933884101
+chimax: 0.02587382311830183
+--- Fitting S(q*) ---
+Chi_Fit:     [0.02587382]
+Chi/Vo:      [0.25873823]
+Cost Func:   9.373886225321554e-30
+Message:     `gtol` termination condition is satisfied.
+# Cost Iter: 4
+Length of Sq_Data in Fit-range 0.7618 to 5.0000: 37
+Loading in Omega Data...
+Number of Omega pair correlations: 4
+*** Fitting Diblock. ***
+Species A Params: {'species': 'pS', 'Rg': 0.942, 'Phi': 0.4827306511561037, 'Vseg': 0.18836290000000003, 'Nseg': 20}
+Species B Params: {'species': 'pmS', 'Rg': 0.97, 'Phi': 0.5172693488438963, 'Vseg': 0.20184, 'Nseg': 20}
+Chi_Fit:     [0.00234407]
+Chi/Vo:      [0.02344074]
+Cost Func:   0.0004889832719139046
+Message:     `xtol` termination condition is satisfied.
+# Cost Iter: 5
+MD q--> inf. S(q) asymptote:
+0.049913004532268886
+Length of Sq_Data in Fit-range 0.7618 to 5.0000: 37
+*** Fitting Diblock. ***
+Species A Params: {'species': 'pS', 'Rg': 0.942, 'Phi': 0.4354312508423116, 'Vseg': 0.171239, 'Nseg': 20}
+Species B Params: {'species': 'pmS', 'Rg': 0.97, 'Phi': 0.5645687491576884, 'Vseg': 0.222024, 'Nseg': 20}
+Chi_Fit:     [0.01592046]
+Chi/Vo:      [0.15920461]
+Cost Func:   0.027536949449948958
+Message:     `ftol` termination condition is satisfied.
+# Cost Iter: 7
+*** Fitting Diblock. ***
+Species A Params: {'species': 'pS', 'Rg': 0.942, 'Phi': 0.4354312508423116, 'Vseg': 0.171239, 'Nseg': 20}
+Species B Params: {'species': 'pmS', 'Rg': 0.97, 'Phi': 0.5645687491576884, 'Vseg': 0.222024, 'Nseg': 20}
+Chi_Fit:     [ 0.02938135  0.0014542  -0.00107812]
+Chi/Vo:      [ 0.29381354  0.01454201 -0.01078124]
+Cost Func:   0.00047577068878819063
+Message:     `ftol` termination condition is satisfied.
+# Cost Iter: 7
+*** Fitting Non-Linear Chi ***
+q*:     1.390311504563131
+S(q*):  0.45129707647206607
+chimax: 0.02816401770714859
+--- Fitting S(q*) ---
+Chi_Fit:     [0.02816402]
+Chi/Vo:      [0.28164018]
+Cost Func:   4.992010415851715e-31
+Message:     `gtol` termination condition is satisfied.
+# Cost Iter: 4
+Length of Sq_Data in Fit-range 0.7618 to 5.0000: 37
+Loading in Omega Data...
+Number of Omega pair correlations: 4
+*** Fitting Diblock. ***
+Species A Params: {'species': 'pS', 'Rg': 0.942, 'Phi': 0.4354312508423116, 'Vseg': 0.171239, 'Nseg': 20}
+Species B Params: {'species': 'pmS', 'Rg': 0.97, 'Phi': 0.5645687491576884, 'Vseg': 0.222024, 'Nseg': 20}
+Chi_Fit:     [0.00450746]
+Chi/Vo:      [0.04507462]
+Cost Func:   0.0005040220190790231
+Message:     `ftol` termination condition is satisfied.
+# Cost Iter: 5
+MD q--> inf. S(q) asymptote:
+0.04913924991255506
+Length of Sq_Data in Fit-range 0.7618 to 5.0000: 37
+*** Fitting Diblock. ***
+Species A Params: {'species': 'pS', 'Rg': 0.942, 'Phi': 0.45898857882646843, 'Vseg': 0.171239, 'Nseg': 20}
+Species B Params: {'species': 'pmS', 'Rg': 0.97, 'Phi': 0.5410114211735315, 'Vseg': 0.20184, 'Nseg': 20}
+Chi_Fit:     [-0.01265685]
+Chi/Vo:      [-0.12656847]
+Cost Func:   0.03076770879934786
+Message:     `ftol` termination condition is satisfied.
+# Cost Iter: 8
+*** Fitting Diblock. ***
+Species A Params: {'species': 'pS', 'Rg': 0.942, 'Phi': 0.45898857882646843, 'Vseg': 0.171239, 'Nseg': 20}
+Species B Params: {'species': 'pmS', 'Rg': 0.97, 'Phi': 0.5410114211735315, 'Vseg': 0.20184, 'Nseg': 20}
+Chi_Fit:     [ 0.01068736  0.00208316 -0.00154961]
+Chi/Vo:      [ 0.10687361  0.0208316  -0.01549607]
+Cost Func:   0.0003150443292901071
+Message:     `ftol` termination condition is satisfied.
+# Cost Iter: 8
+*** Fitting Non-Linear Chi ***
+q*:     1.3818181198679853
+S(q*):  0.3728826463707235
+chimax: 0.009015293535622328
+--- Fitting S(q*) ---
+Chi_Fit:     [0.00901529]
+Chi/Vo:      [0.09015294]
+Cost Func:   6.794680843798168e-31
+Message:     `gtol` termination condition is satisfied.
+# Cost Iter: 4
+Length of Sq_Data in Fit-range 0.7618 to 5.0000: 37
+Loading in Omega Data...
+Number of Omega pair correlations: 4
+*** Fitting Diblock. ***
+Species A Params: {'species': 'pS', 'Rg': 0.942, 'Phi': 0.45898857882646843, 'Vseg': 0.171239, 'Nseg': 20}
+Species B Params: {'species': 'pmS', 'Rg': 0.97, 'Phi': 0.5410114211735315, 'Vseg': 0.20184, 'Nseg': 20}
+Chi_Fit:     [-0.01874045]
+Chi/Vo:      [-0.18740453]
+Cost Func:   0.0011648402791977455
+Message:     `xtol` termination condition is satisfied.
+# Cost Iter: 8
+MD q--> inf. S(q) asymptote:
+0.04102183044271987
+Length of Sq_Data in Fit-range 0.7618 to 5.0000: 37
+*** Fitting Diblock. ***
+Species A Params: {'species': 'pS', 'Rg': 1.0362, 'Phi': 0.45898857882646843, 'Vseg': 0.171239, 'Nseg': 20}
+Species B Params: {'species': 'pmS', 'Rg': 0.97, 'Phi': 0.5410114211735315, 'Vseg': 0.20184, 'Nseg': 20}
+Chi_Fit:     [0.0142021]
+Chi/Vo:      [0.14202097]
+Cost Func:   0.01596403009546049
+Message:     `ftol` termination condition is satisfied.
+# Cost Iter: 7
+*** Fitting Diblock. ***
+Species A Params: {'species': 'pS', 'Rg': 1.0362, 'Phi': 0.45898857882646843, 'Vseg': 0.171239, 'Nseg': 20}
+Species B Params: {'species': 'pmS', 'Rg': 0.97, 'Phi': 0.5410114211735315, 'Vseg': 0.20184, 'Nseg': 20}
+Chi_Fit:     [ 0.01389671  0.00680588 -0.00138636]
+Chi/Vo:      [ 0.1389671   0.06805882 -0.01386359]
+Cost Func:   0.0003672948501131243
+Message:     `xtol` termination condition is satisfied.
+# Cost Iter: 9
+*** Fitting Non-Linear Chi ***
+q*:     1.3818181198679853
+S(q*):  0.41048279044404534
+chimax: 0.021837494709609252
+--- Fitting S(q*) ---
+Chi_Fit:     [0.02183749]
+Chi/Vo:      [0.21837495]
+Cost Func:   1.5407439555097887e-33
+Message:     `gtol` termination condition is satisfied.
+# Cost Iter: 5
+Length of Sq_Data in Fit-range 0.7618 to 5.0000: 37
+Loading in Omega Data...
+Number of Omega pair correlations: 4
+*** Fitting Diblock. ***
+Species A Params: {'species': 'pS', 'Rg': 1.0362, 'Phi': 0.45898857882646843, 'Vseg': 0.171239, 'Nseg': 20}
+Species B Params: {'species': 'pmS', 'Rg': 0.97, 'Phi': 0.5410114211735315, 'Vseg': 0.20184, 'Nseg': 20}
+Chi_Fit:     [-0.00367232]
+Chi/Vo:      [-0.03672315]
+Cost Func:   0.00043076449959600463
+Message:     `ftol` termination condition is satisfied.
+# Cost Iter: 5
+MD q--> inf. S(q) asymptote:
+0.04512401348699187
+Length of Sq_Data in Fit-range 0.7618 to 5.0000: 37
+*** Fitting Diblock. ***
+Species A Params: {'species': 'pS', 'Rg': 0.942, 'Phi': 0.45898857882646843, 'Vseg': 0.171239, 'Nseg': 20}
+Species B Params: {'species': 'pmS', 'Rg': 1.067, 'Phi': 0.5410114211735315, 'Vseg': 0.20184, 'Nseg': 20}
+Chi_Fit:     [0.01161942]
+Chi/Vo:      [0.11619422]
+Cost Func:   0.0179905561409212
+Message:     `ftol` termination condition is satisfied.
+# Cost Iter: 6
+*** Fitting Diblock. ***
+Species A Params: {'species': 'pS', 'Rg': 0.942, 'Phi': 0.45898857882646843, 'Vseg': 0.171239, 'Nseg': 20}
+Species B Params: {'species': 'pmS', 'Rg': 1.067, 'Phi': 0.5410114211735315, 'Vseg': 0.20184, 'Nseg': 20}
+Chi_Fit:     [ 0.0134043   0.00633925 -0.00140182]
+Chi/Vo:      [ 0.13404301  0.06339246 -0.01401824]
+Cost Func:   0.00037524602787606005
+Message:     `xtol` termination condition is satisfied.
+# Cost Iter: 10
+*** Fitting Non-Linear Chi ***
+q*:     1.3818181198679853
+S(q*):  0.4102470893692816
+chimax: 0.020397697508585184
+--- Fitting S(q*) ---
+Chi_Fit:     [0.0203977]
+Chi/Vo:      [0.20397698]
+Cost Func:   0.0
+Message:     `gtol` termination condition is satisfied.
+# Cost Iter: 5
+Length of Sq_Data in Fit-range 0.7618 to 5.0000: 37
+Loading in Omega Data...
+Number of Omega pair correlations: 4
+*** Fitting Diblock. ***
+Species A Params: {'species': 'pS', 'Rg': 0.942, 'Phi': 0.45898857882646843, 'Vseg': 0.171239, 'Nseg': 20}
+Species B Params: {'species': 'pmS', 'Rg': 1.067, 'Phi': 0.5410114211735315, 'Vseg': 0.20184, 'Nseg': 20}
+Chi_Fit:     [-0.00367232]
+Chi/Vo:      [-0.03672315]
+Cost Func:   0.00043076449959600463
+Message:     `ftol` termination condition is satisfied.
+# Cost Iter: 5
+MD q--> inf. S(q) asymptote:
+0.04512401348699187
+Length of Sq_Data in Fit-range 0.7618 to 5.5000: 45
+*** Fitting Diblock. ***
+Species A Params: {'species': 'pS', 'Rg': 0.942, 'Phi': 0.45898857882646843, 'Vseg': 0.171239, 'Nseg': 20}
+Species B Params: {'species': 'pmS', 'Rg': 0.97, 'Phi': 0.5410114211735315, 'Vseg': 0.20184, 'Nseg': 20}
+Chi_Fit:     [0.00552331]
+Chi/Vo:      [0.05523313]
+Cost Func:   0.03382071499291203
+Message:     `ftol` termination condition is satisfied.
+# Cost Iter: 7
+*** Fitting Diblock. ***
+Species A Params: {'species': 'pS', 'Rg': 0.942, 'Phi': 0.45898857882646843, 'Vseg': 0.171239, 'Nseg': 20}
+Species B Params: {'species': 'pmS', 'Rg': 0.97, 'Phi': 0.5410114211735315, 'Vseg': 0.20184, 'Nseg': 20}
+Chi_Fit:     [ 0.02388625  0.00139148 -0.00124067]
+Chi/Vo:      [ 0.23886254  0.01391478 -0.01240672]
+Cost Func:   0.00036685508909362324
+Message:     `xtol` termination condition is satisfied.
+# Cost Iter: 8
+*** Fitting Non-Linear Chi ***
+q*:     1.390311504563131
+S(q*):  0.4129456527060668
+chimax: 0.021940340863610474
+--- Fitting S(q*) ---
+Chi_Fit:     [0.02194034]
+Chi/Vo:      [0.21940341]
+Cost Func:   1.3905214198475843e-29
+Message:     `gtol` termination condition is satisfied.
+# Cost Iter: 4
+Length of Sq_Data in Fit-range 0.7618 to 5.5000: 45
+Loading in Omega Data...
+Number of Omega pair correlations: 4
+*** Fitting Diblock. ***
+Species A Params: {'species': 'pS', 'Rg': 0.942, 'Phi': 0.45898857882646843, 'Vseg': 0.171239, 'Nseg': 20}
+Species B Params: {'species': 'pmS', 'Rg': 0.97, 'Phi': 0.5410114211735315, 'Vseg': 0.20184, 'Nseg': 20}
+Chi_Fit:     [-0.00367318]
+Chi/Vo:      [-0.0367318]
+Cost Func:   0.00043213733079703763
+Message:     `ftol` termination condition is satisfied.
+# Cost Iter: 5
+MD q--> inf. S(q) asymptote:
+0.04512401348699187
+Length of Sq_Data in Fit-range 0.7618 to 5.0000: 37
+*** Fitting Diblock. ***
+Species A Params: {'species': 'pS', 'Rg': 0.942, 'Phi': 0.5146779036461072, 'Vseg': 0.21404875, 'Nseg': 20}
+Species B Params: {'species': 'pmS', 'Rg': 0.97, 'Phi': 0.4853220963538928, 'Vseg': 0.20184, 'Nseg': 20}
+Chi_Fit:     [0.02177152]
+Chi/Vo:      [0.2177152]
+Cost Func:   0.03102413148467526
+Message:     `ftol` termination condition is satisfied.
+# Cost Iter: 8
+*** Fitting Diblock. ***
+Species A Params: {'species': 'pS', 'Rg': 0.942, 'Phi': 0.5146779036461072, 'Vseg': 0.21404875, 'Nseg': 20}
+Species B Params: {'species': 'pmS', 'Rg': 0.97, 'Phi': 0.4853220963538928, 'Vseg': 0.20184, 'Nseg': 20}
+Chi_Fit:     [ 0.03234865  0.0010344  -0.0008616 ]
+Chi/Vo:      [ 0.32348653  0.01034403 -0.008616  ]
+Cost Func:   0.0007769077715660876
+Message:     `xtol` termination condition is satisfied.
+# Cost Iter: 8
+*** Fitting Non-Linear Chi ***
+q*:     1.3988048892582763
+S(q*):  0.5231105173332172
+chimax: 0.03107398859058343
+--- Fitting S(q*) ---
+Chi_Fit:     [0.03107399]
+Chi/Vo:      [0.31073989]
+Cost Func:   4.492809374266544e-30
+Message:     `gtol` termination condition is satisfied.
+# Cost Iter: 4
+Length of Sq_Data in Fit-range 0.7618 to 5.0000: 37
+Loading in Omega Data...
+Number of Omega pair correlations: 4
+*** Fitting Diblock. ***
+Species A Params: {'species': 'pS', 'Rg': 0.942, 'Phi': 0.5146779036461072, 'Vseg': 0.21404875, 'Nseg': 20}
+Species B Params: {'species': 'pmS', 'Rg': 0.97, 'Phi': 0.4853220963538928, 'Vseg': 0.20184, 'Nseg': 20}
+Chi_Fit:     [0.01006498]
+Chi/Vo:      [0.10064977]
+Cost Func:   0.0015421595145363423
+Message:     `xtol` termination condition is satisfied.
+# Cost Iter: 6
+MD q--> inf. S(q) asymptote:
+0.056738128835553896
+Length of Sq_Data in Fit-range 0.7618 to 5.0000: 37
+*** Fitting Diblock. ***
+Species A Params: {'species': 'pS', 'Rg': 0.942, 'Phi': 0.4043051525361301, 'Vseg': 0.171239, 'Nseg': 20}
+Species B Params: {'species': 'pmS', 'Rg': 0.97, 'Phi': 0.5956948474638699, 'Vseg': 0.25229999999999997, 'Nseg': 20}
+Chi_Fit:     [0.02828411]
+Chi/Vo:      [0.28284109]
+Cost Func:   0.024080045918445585
+Message:     `ftol` termination condition is satisfied.
+# Cost Iter: 8
+*** Fitting Diblock. ***
+Species A Params: {'species': 'pS', 'Rg': 0.942, 'Phi': 0.4043051525361301, 'Vseg': 0.171239, 'Nseg': 20}
+Species B Params: {'species': 'pmS', 'Rg': 0.97, 'Phi': 0.5956948474638699, 'Vseg': 0.25229999999999997, 'Nseg': 20}
+Chi_Fit:     [ 0.03673284  0.00155126 -0.00086802]
+Chi/Vo:      [ 0.36732845  0.01551261 -0.00868015]
+Cost Func:   0.0007825100993408204
+Message:     `xtol` termination condition is satisfied.
+# Cost Iter: 9
+*** Fitting Non-Linear Chi ***
+q*:     1.3988048892582763
+S(q*):  0.5050241627869713
+chimax: 0.03644493193489709
+--- Fitting S(q*) ---
+Chi_Fit:     [0.03644493]
+Chi/Vo:      [0.36444932]
+Cost Func:   0.0
+Message:     `gtol` termination condition is satisfied.
+# Cost Iter: 4
+Length of Sq_Data in Fit-range 0.7618 to 5.0000: 37
+Loading in Omega Data...
+Number of Omega pair correlations: 4
+*** Fitting Diblock. ***
+Species A Params: {'species': 'pS', 'Rg': 0.942, 'Phi': 0.4043051525361301, 'Vseg': 0.171239, 'Nseg': 20}
+Species B Params: {'species': 'pmS', 'Rg': 0.97, 'Phi': 0.5956948474638699, 'Vseg': 0.25229999999999997, 'Nseg': 20}
+Chi_Fit:     [0.01508959]
+Chi/Vo:      [0.15089595]
+Cost Func:   0.001914506360053199
+Message:     `ftol` termination condition is satisfied.
+# Cost Iter: 6
+MD q--> inf. S(q) asymptote:
+0.05470695475935068
+Length of Sq_Data in Fit-range 0.7618 to 5.0000: 37
+*** Fitting Diblock. ***
+Species A Params: {'species': 'pS', 'Rg': 0.942, 'Phi': 0.45898857882646843, 'Vseg': 0.171239, 'Nseg': 20}
+Species B Params: {'species': 'pmS', 'Rg': 0.97, 'Phi': 0.5410114211735315, 'Vseg': 0.20184, 'Nseg': 20}
+Chi_Fit:     [-0.04274808]
+Chi/Vo:      [-0.42748076]
+Cost Func:   0.03244258029074277
+Message:     `ftol` termination condition is satisfied.
+# Cost Iter: 9
+*** Fitting Diblock. ***
+Species A Params: {'species': 'pS', 'Rg': 0.942, 'Phi': 0.45898857882646843, 'Vseg': 0.171239, 'Nseg': 20}
+Species B Params: {'species': 'pmS', 'Rg': 0.97, 'Phi': 0.5410114211735315, 'Vseg': 0.20184, 'Nseg': 20}
+Chi_Fit:     [-0.00925091  0.00309956 -0.00200514]
+Chi/Vo:      [-0.09250913  0.03099564 -0.02005143]
+Cost Func:   0.00036655447235331103
+Message:     `xtol` termination condition is satisfied.
+# Cost Iter: 12
+*** Fitting Non-Linear Chi ***
+q*:     1.3733247351728397
+S(q*):  0.32522035989115267
+chimax: -0.010537513334297432
+--- Fitting S(q*) ---
+Chi_Fit:     [-0.01053751]
+Chi/Vo:      [-0.10537513]
+Cost Func:   6.162975822039155e-33
+Message:     `gtol` termination condition is satisfied.
+# Cost Iter: 4
+Length of Sq_Data in Fit-range 0.7618 to 5.0000: 37
+Loading in Omega Data...
+Number of Omega pair correlations: 4
+*** Fitting Diblock. ***
+Species A Params: {'species': 'pS', 'Rg': 0.942, 'Phi': 0.45898857882646843, 'Vseg': 0.171239, 'Nseg': 20}
+Species B Params: {'species': 'pmS', 'Rg': 0.97, 'Phi': 0.5410114211735315, 'Vseg': 0.20184, 'Nseg': 20}
+Chi_Fit:     [-0.04226166]
+Chi/Vo:      [-0.42261664]
+Cost Func:   0.0029581881551525796
+Message:     Both `ftol` and `xtol` termination conditions are satisfied.
+# Cost Iter: 9
+MD q--> inf. S(q) asymptote:
+0.036099210789593494
+Length of Sq_Data in Fit-range 0.7618 to 5.0000: 37
+*** Fitting Diblock. ***
+Species A Params: {'species': 'pS', 'Rg': 1.1775, 'Phi': 0.45898857882646843, 'Vseg': 0.171239, 'Nseg': 20}
+Species B Params: {'species': 'pmS', 'Rg': 0.97, 'Phi': 0.5410114211735315, 'Vseg': 0.20184, 'Nseg': 20}
+Chi_Fit:     [0.02360234]
+Chi/Vo:      [0.23602336]
+Cost Func:   0.007698832244402253
+Message:     `xtol` termination condition is satisfied.
+# Cost Iter: 7
+*** Fitting Diblock. ***
+Species A Params: {'species': 'pS', 'Rg': 1.1775, 'Phi': 0.45898857882646843, 'Vseg': 0.171239, 'Nseg': 20}
+Species B Params: {'species': 'pmS', 'Rg': 0.97, 'Phi': 0.5410114211735315, 'Vseg': 0.20184, 'Nseg': 20}
+Chi_Fit:     [ 0.00071784  0.0151029  -0.00157868]
+Chi/Vo:      [ 0.0071784   0.15102896 -0.01578679]
+Cost Func:   0.0005313455796714552
+Message:     `xtol` termination condition is satisfied.
+# Cost Iter: 10
+*** Fitting Non-Linear Chi ***
+q*:     1.3818181198679853
+S(q*):  0.4069743174010237
+chimax: 0.02379994372169499
+--- Fitting S(q*) ---
+Chi_Fit:     [0.02379994]
+Chi/Vo:      [0.23799944]
+Cost Func:   6.162975822039155e-33
+Message:     `gtol` termination condition is satisfied.
+# Cost Iter: 9
+Length of Sq_Data in Fit-range 0.7618 to 5.0000: 37
+Loading in Omega Data...
+Number of Omega pair correlations: 4
+*** Fitting Diblock. ***
+Species A Params: {'species': 'pS', 'Rg': 1.1775, 'Phi': 0.45898857882646843, 'Vseg': 0.171239, 'Nseg': 20}
+Species B Params: {'species': 'pmS', 'Rg': 0.97, 'Phi': 0.5410114211735315, 'Vseg': 0.20184, 'Nseg': 20}
+Chi_Fit:     [-0.00367232]
+Chi/Vo:      [-0.03672315]
+Cost Func:   0.00043076449959600463
+Message:     `ftol` termination condition is satisfied.
+# Cost Iter: 5
+MD q--> inf. S(q) asymptote:
+0.04512401348699187
+Length of Sq_Data in Fit-range 0.7618 to 5.0000: 37
+*** Fitting Diblock. ***
+Species A Params: {'species': 'pS', 'Rg': 0.942, 'Phi': 0.45898857882646843, 'Vseg': 0.171239, 'Nseg': 20}
+Species B Params: {'species': 'pmS', 'Rg': 1.2125, 'Phi': 0.5410114211735315, 'Vseg': 0.20184, 'Nseg': 20}
+Chi_Fit:     [0.01830574]
+Chi/Vo:      [0.18305741]
+Cost Func:   0.009567050770401049
+Message:     `ftol` termination condition is satisfied.
+# Cost Iter: 7
+*** Fitting Diblock. ***
+Species A Params: {'species': 'pS', 'Rg': 0.942, 'Phi': 0.45898857882646843, 'Vseg': 0.171239, 'Nseg': 20}
+Species B Params: {'species': 'pmS', 'Rg': 1.2125, 'Phi': 0.5410114211735315, 'Vseg': 0.20184, 'Nseg': 20}
+Chi_Fit:     [-0.00019456  0.01371417 -0.00161297]
+Chi/Vo:      [-0.0019456   0.13714174 -0.01612966]
+Cost Func:   0.000581320809349951
+Message:     `xtol` termination condition is satisfied.
+# Cost Iter: 11
+*** Fitting Non-Linear Chi ***
+q*:     1.3733247351728397
+S(q*):  0.4063618713153508
+chimax: 0.019933218060010215
+--- Fitting S(q*) ---
+Chi_Fit:     [0.01993322]
+Chi/Vo:      [0.19933218]
+Cost Func:   1.5407439555097887e-33
+Message:     `gtol` termination condition is satisfied.
+# Cost Iter: 11
+Length of Sq_Data in Fit-range 0.7618 to 5.0000: 37
+Loading in Omega Data...
+Number of Omega pair correlations: 4
+*** Fitting Diblock. ***
+Species A Params: {'species': 'pS', 'Rg': 0.942, 'Phi': 0.45898857882646843, 'Vseg': 0.171239, 'Nseg': 20}
+Species B Params: {'species': 'pmS', 'Rg': 1.2125, 'Phi': 0.5410114211735315, 'Vseg': 0.20184, 'Nseg': 20}
+Chi_Fit:     [-0.00367232]
+Chi/Vo:      [-0.03672315]
+Cost Func:   0.00043076449959600463
+Message:     `ftol` termination condition is satisfied.
+# Cost Iter: 5
+MD q--> inf. S(q) asymptote:
+0.04512401348699187
+Length of Sq_Data in Fit-range 0.7618 to 6.2500: 57
+*** Fitting Diblock. ***
+Species A Params: {'species': 'pS', 'Rg': 0.942, 'Phi': 0.45898857882646843, 'Vseg': 0.171239, 'Nseg': 20}
+Species B Params: {'species': 'pmS', 'Rg': 0.97, 'Phi': 0.5410114211735315, 'Vseg': 0.20184, 'Nseg': 20}
+Chi_Fit:     [0.00493874]
+Chi/Vo:      [0.04938738]
+Cost Func:   0.039604277258350605
+Message:     `ftol` termination condition is satisfied.
+# Cost Iter: 7
+*** Fitting Diblock. ***
+Species A Params: {'species': 'pS', 'Rg': 0.942, 'Phi': 0.45898857882646843, 'Vseg': 0.171239, 'Nseg': 20}
+Species B Params: {'species': 'pmS', 'Rg': 0.97, 'Phi': 0.5410114211735315, 'Vseg': 0.20184, 'Nseg': 20}
+Chi_Fit:     [ 0.02468852  0.00089365 -0.00118653]
+Chi/Vo:      [ 0.24688515  0.00893652 -0.01186527]
+Cost Func:   0.00042017391353881505
+Message:     `xtol` termination condition is satisfied.
+# Cost Iter: 10
+*** Fitting Non-Linear Chi ***
+q*:     1.3818181198679853
+S(q*):  0.4130974621056995
+chimax: 0.02206892623446962
+--- Fitting S(q*) ---
+Chi_Fit:     [0.02206893]
+Chi/Vo:      [0.22068926]
+Cost Func:   4.797322009633498e-28
+Message:     `gtol` termination condition is satisfied.
+# Cost Iter: 4
+Length of Sq_Data in Fit-range 0.7618 to 6.2500: 57
+Loading in Omega Data...
+Number of Omega pair correlations: 4
+*** Fitting Diblock. ***
+Species A Params: {'species': 'pS', 'Rg': 0.942, 'Phi': 0.45898857882646843, 'Vseg': 0.171239, 'Nseg': 20}
+Species B Params: {'species': 'pmS', 'Rg': 0.97, 'Phi': 0.5410114211735315, 'Vseg': 0.20184, 'Nseg': 20}
+Chi_Fit:     [-0.00367342]
+Chi/Vo:      [-0.03673419]
+Cost Func:   0.0004339826128897569
+Message:     `ftol` termination condition is satisfied.
+# Cost Iter: 5
+MD q--> inf. S(q) asymptote:
+0.04512401348699187

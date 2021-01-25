@@ -1,0 +1,125 @@
+************************************
+Running omega test for AB-diblock...
+************************************
+Length of Sq_Data in Fit-range 0.0100 to 5.0000: 4990
+*** Fitting Diblock. ***
+Species A Params: {'species': 'A', 'Rg': 0.894427190999916, 'Phi': 0.5, 'Vseg': 0.2, 'Nseg': 20}
+Species B Params: {'species': 'B', 'Rg': 0.894427190999916, 'Phi': 0.5, 'Vseg': 0.2, 'Nseg': 20}
+Chi_Fit:     [0.05]
+Chi/Vo:      [0.5]
+Cost Func:   1.7078719731663847e-23
+Message:     `gtol` termination condition is satisfied.
+# Cost Iter: 8
+*** Fitting Diblock. ***
+Species A Params: {'species': 'A', 'Rg': 0.894427190999916, 'Phi': 0.5, 'Vseg': 0.2, 'Nseg': 20}
+Species B Params: {'species': 'B', 'Rg': 0.894427190999916, 'Phi': 0.5, 'Vseg': 0.2, 'Nseg': 20}
+Chi_Fit:     [ 5.00000000e-02 -1.04775721e-17  2.23725466e-18]
+Chi/Vo:      [ 5.00000000e-01 -1.04775721e-16  2.23725466e-17]
+Cost Func:   1.7078763749563098e-23
+Message:     `xtol` termination condition is satisfied.
+# Cost Iter: 6
+*** Fitting Non-Linear Chi ***
+q*:     1.54
+S(q*):  0.6158688669062651
+chimax: 0.05
+--- Fitting S(q*) ---
+Chi_Fit:     [0.05]
+Chi/Vo:      [0.5]
+Cost Func:   6.162975822039155e-33
+Message:     `gtol` termination condition is satisfied.
+# Cost Iter: 1
+Length of Sq_Data in Fit-range 0.0100 to 5.0000: 4990
+Loading in Omega Data...
+Number of Omega pair correlations: 4
+*** Fitting Diblock. ***
+Species A Params: {'species': 'A', 'Rg': 0.894427190999916, 'Phi': 0.5, 'Vseg': 0.2, 'Nseg': 20}
+Species B Params: {'species': 'B', 'Rg': 0.894427190999916, 'Phi': 0.5, 'Vseg': 0.2, 'Nseg': 20}
+Chi_Fit:     [0.05]
+Chi/Vo:      [0.5]
+Cost Func:   5.091336669183857e-29
+Message:     `gtol` termination condition is satisfied.
+# Cost Iter: 8
+************************************
+Results of omega test...
+************************************
+Set Chi:  0.05
+Fit Chi:  0.05
+Omega Test Passed!
+************************************
+End of omega test for AB-diblock...
+************************************
+**********************************************
+Running InvSqNc vs ChiN test for AB-diblock...
+**********************************************
+************************************
+Results of SqInvNc vs ChiN test...
+************************************
+Test yint:         10.494869341384215
+Test yval @ 10.495:  -0.00013065861578520632
+Corr. yint:         10.495
+Corr. yval @ 10.495:  0.0
+SqInvNc vs ChiN Test Passed!
+************************************
+End of SqInvNc vs ChiN test...
+************************************
+**********************************************
+Running SqPeakFitTest test for AB-diblock...
+**********************************************
+Rg0: 2.5126283715132516
+*** Fitting Diblock. ***
+Species A Params: {'species': 'A', 'Rg': 1.776696560098732, 'Phi': 0.5, 'Vseg': 1, 'Nseg': 16.0}
+Species B Params: {'species': 'B', 'Rg': 1.776696560098732, 'Phi': 0.5, 'Vseg': 1, 'Nseg': 16.0}
+Chi_Fit:     [0.225084]
+Chi/Vo:      [0.225084]
+Cost Func:   0.0
+Message:     `gtol` termination condition is satisfied.
+# Cost Iter: 9
+*** Fitting Diblock. ***
+Species A Params: {'species': 'A', 'Rg': 1.776696560098732, 'Phi': 0.5, 'Vseg': 1, 'Nseg': 16.0}
+Species B Params: {'species': 'B', 'Rg': 1.776696560098732, 'Phi': 0.5, 'Vseg': 1, 'Nseg': 16.0}
+Chi_Fit:     [0.29927848]
+Chi/Vo:      [0.29927848]
+Cost Func:   7.636173562539394e-28
+Message:     `xtol` termination condition is satisfied.
+# Cost Iter: 12
+*** Fitting Diblock. ***
+Species A Params: {'species': 'A', 'Rg': 1.776696560098732, 'Phi': 0.5, 'Vseg': 1, 'Nseg': 16.0}
+Species B Params: {'species': 'B', 'Rg': 1.776696560098732, 'Phi': 0.5, 'Vseg': 1, 'Nseg': 16.0}
+Chi_Fit:     [0.31900408]
+Chi/Vo:      [0.31900408]
+Cost Func:   2.394704029212354e-22
+Message:     `xtol` termination condition is satisfied.
+# Cost Iter: 15
+************************************
+Results of SqPeakFitTest test...
+************************************
+Test Chi*N Data:
+[ 7.2027  9.5769 10.2081]
+True Chi*N Data:
+[7.2, 9.59, 10.2]
+|Diff.|/Chi*N between Chi*N Data:
+[0.000373 0.001365 0.000797]
+SqPeakFit Test Passed!
+************************************
+End of SqPeakFitTest test...
+************************************
+Length of Sq_Data in Fit-range 0.7618 to 5.0000: 37
+*** Fitting Diblock. ***
+Species A Params: {'species': 'pS', 'Rg': 0.942, 'Phi': 0.45898857882646843, 'Vseg': 0.171239, 'Nseg': 20}
+Species B Params: {'species': 'pmS', 'Rg': 0.97, 'Phi': 0.5410114211735315, 'Vseg': 0.20184, 'Nseg': 20}
+Chi_Fit:     [0.00621192]
+Chi/Vo:      [0.06211923]
+Cost Func:   0.02834998482840201
+Message:     `ftol` termination condition is satisfied.
+# Cost Iter: 7
+Length of Sq_Data in Fit-range 0.7618 to 5.0000: 37
+Loading in Omega Data...
+Number of Omega pair correlations: 4
+*** Fitting Diblock. ***
+Species A Params: {'species': 'pS', 'Rg': 0.942, 'Phi': 0.45898857882646843, 'Vseg': 0.171239, 'Nseg': 20}
+Species B Params: {'species': 'pmS', 'Rg': 0.97, 'Phi': 0.5410114211735315, 'Vseg': 0.20184, 'Nseg': 20}
+Chi_Fit:     [-0.00367232]
+Chi/Vo:      [-0.03672315]
+Cost Func:   0.00043076449959600463
+Message:     `ftol` termination condition is satisfied.
+# Cost Iter: 5
