@@ -5,4 +5,10 @@ RunRPA.py and RunRPA_simple.py are two example scripts of how to use RPAFit.py.
 
 Note: These output backup.json and backup.pickle files that we will be using to save fit information. 
 
+These backup files will be saved to the Kraton_ChiData git repository.
+
+git clone https://github.com/nsherck/Kraton_ChiData.git
+
+
+
 
