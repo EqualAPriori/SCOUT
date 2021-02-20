@@ -1,0 +1,82 @@
+{
+    "Arch": "diblock",
+    "Chi": 0.31900408041090444,
+    "ChiLower": 0.0,
+    "ChiParams": [
+        0.31900408041090444
+    ],
+    "ChiUpper": Infinity,
+    "FitError": 2.394704029212354e-22,
+    "FitRg": false,
+    "FitSqMax": false,
+    "NonLinearChi": false,
+    "OmegaData": [],
+    "OmegaQRange": [
+        0.0,
+        1.0
+    ],
+    "OmegaScale": [],
+    "Rg0": 0.0,
+    "SaveName": "SqAB_Diblock_RPA.dat",
+    "Scale": false,
+    "Solvent": false,
+    "SpeciesData": [
+        {
+            "Nseg": 16.0,
+            "Phi": 0.5,
+            "Rg": 1.776696560098732,
+            "Vseg": 1,
+            "species": "A"
+        },
+        {
+            "Nseg": 16.0,
+            "Phi": 0.5,
+            "Rg": 1.776696560098732,
+            "Vseg": 1,
+            "species": "B"
+        },
+        {
+            "Nseg": 16.0,
+            "Phi": 0.5,
+            "Rg": 1.776696560098732,
+            "Vseg": 1,
+            "species": "A"
+        },
+        {
+            "Nseg": 16.0,
+            "Phi": 0.5,
+            "Rg": 1.776696560098732,
+            "Vseg": 1,
+            "species": "B"
+        },
+        {
+            "Nseg": 16.0,
+            "Phi": 0.5,
+            "Rg": 1.776696560098732,
+            "Vseg": 1,
+            "species": "A"
+        },
+        {
+            "Nseg": 16.0,
+            "Phi": 0.5,
+            "Rg": 1.776696560098732,
+            "Vseg": 1,
+            "species": "B"
+        }
+    ],
+    "SqData": [
+        [
+            0.7744877921711937,
+            55.8
+        ]
+    ],
+    "UseDGC": false,
+    "UseFJC": false,
+    "UseOmega": false,
+    "Vo": 1.0,
+    "dq": 0.01,
+    "qmax": 2.8,
+    "qmaxFit": 2.05,
+    "qmin": 0.1,
+    "qminFit": 1.0
+}

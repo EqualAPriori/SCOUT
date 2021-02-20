@@ -1,0 +1,51 @@
+{
+    "Arch": "diblock",
+    "Chi": 0.01,
+    "ChiLower": 0.0,
+    "ChiParams": [
+        0.001,
+        0.0,
+        0.0
+    ],
+    "ChiUpper": Infinity,
+    "FitError": 0.0,
+    "FitRg": false,
+    "FitSqMax": false,
+    "NonLinearChi": false,
+    "OmegaData": [],
+    "OmegaQRange": [
+        0.0,
+        1.0
+    ],
+    "OmegaScale": [],
+    "Rg0": 0.0,
+    "SaveName": "Sq_diblock_RPA.dat",
+    "Scale": false,
+    "Solvent": false,
+    "SpeciesData": [
+        {
+            "Nseg": 50000.0,
+            "Phi": 0.5,
+            "Rg": 1.0,
+            "Vseg": 1.0,
+            "species": "A"
+        },
+        {
+            "Nseg": 50000.0,
+            "Phi": 0.5,
+            "Rg": 1.0,
+            "Vseg": 1.0,
+            "species": "B"
+        }
+    ],
+    "SqData": null,
+    "UseDGC": false,
+    "UseFJC": false,
+    "UseOmega": false,
+    "Vo": 1.0,
+    "dq": 0.01,
+    "qmax": 100.0,
+    "qmaxFit": 5.0,
+    "qmin": 0.0001,
+    "qminFit": 0.1
+}
