@@ -194,7 +194,7 @@ def histogrammapping(mesh, modveclist, debug=False):
   abidx = 0
   for ik in range(1,nmesh):
     current = modveclist[index[ik]]
-    if previous < current-GRIDTOL or previous > current+GRIDTOL:
+    if previous < current-GRIDTOL or previous > current+GRIDTOL: #technically if modveclist is sorted, won't find current < previous
       # New |k| entry
       histabcissae.append(current)
       histndegen.append(0)
@@ -241,7 +241,7 @@ def histogrammapping(mesh, modveclist, debug=False):
   return np.array(histmapper), np.array(histabcissae), np.array(histndegen), index, np.array(orderedVecList)
 
 
-def pruneKmesh(kmesh3d,modklist,resolution=0.25,n_per_bin=50,debug=False):
+def pruneKmesh(kmesh3d,modklist,resolution=0.25,n_per_bin=50,prune_min_k=2.0,debug=False):
   """ Prune the Kmesh by resolution
   
   Parameters
@@ -254,6 +254,8 @@ def pruneKmesh(kmesh3d,modklist,resolution=0.25,n_per_bin=50,debug=False):
       the magnitudes of the kvecs
   debug : bool
       whether or not to print debugging reports
+  prune_min_k : float
+      the minimum |k| above which to prune.
 
   Returns
   -------
@@ -263,6 +265,10 @@ def pruneKmesh(kmesh3d,modklist,resolution=0.25,n_per_bin=50,debug=False):
       the new modklist
   new_nk3d : int
       the new nk3d
+
+  Notes
+  -----
+  NOTE! currently it prunes vectors in the bins. However, it still retains the exact magnitude of each of the vectors, instead of calculating some kind of average kvector magnitude of that bin! I.e. the final results won't be equally spaced |k|, but the actual discrete |k|'s of the simulation box, subsampled.
   """
 
   # First generate histogram mapping
@@ -273,41 +279,84 @@ def pruneKmesh(kmesh3d,modklist,resolution=0.25,n_per_bin=50,debug=False):
 
   # Iterate through bins 
   ibin = 0       #current bin's index
-  current = 0    #current bin's lower cutoff
+  current = 0    #current bin's lower cutoff. New bin starts at new detected abcissae > current+resolution. 2021.02.16 changed the stored abcissae to the bin *midpoint*
   bins = []      #a list of the cut-off points we use in the binning process
   binvecs = []   #temporary list of vectors in current bin
   finalmesh = [] #vectors that we keep in the final mesh
+  finalmesh_binned = []
   bins.append(0)
   for ia,ab in enumerate(histabcissae):
-      if ab > current + resolution: #new bin detected
-          # prune current bin if needed
+      #newbin = (ab > current + resolution/2.0) or (ab>=prune_min_k-resolution/2.0 and ab < prune_min_k+resolution/2.0) or (ab!=current and ab<prune_min_k-resolution/2.0): #new bin detected
+      if (ab!=current and ab<prune_min_k-resolution/2.0):
+          #if under threshhold
+          new_bin = True
+      elif current < prune_min_k and ab >= prune_min_k-resolution/2.0 and ab < prune_min_k+resolution/2.0:
+          #bin centered @ threshhold
+          new_bin = True
+      elif ab >= current + resolution/2.0:
+          new_bin = True
+      else:
+          new_bin = False
+
+      if new_bin:
+          # prune current bin if needed, before moving on
           n_in_bin = len(binvecs)
           if n_in_bin > n_per_bin:
-              print("{} vecs in current bin ({},{}), pruning down to {}".format(n_in_bin, current, ab, n_per_bin))
+              print("{} vecs in previous bin {}, pruning down to {} before going to next bin containing {}".format(n_in_bin, current, n_per_bin, ab))
               inds2keep= np.random.choice(n_in_bin, n_per_bin, replace=False)
               if debug:
                   print(inds2keep)
               binvecs = np.array(binvecs)
               binvecs = binvecs[list(inds2keep),:]
 
-          # start new bin
+          # store kvecs and start new bin
           finalmesh.extend(binvecs)
-          if (ab-current)/resolution > bintol:
+          finalmesh_binned.append(binvecs)
+          if ab < prune_min_k-resolution/2.0:
               current = ab
           else:
-              current = current + resolution
+              #elif (ab-current)/resolution > bintol: #for if next ab actually skips a bin?
+              #    current = current
+              if ab < prune_min_k + resolution/2.0:
+                  current = prune_min_k
+              else: # find closest regularly-spaced bin starting from prune_min_k +/- - resolution
+                  #current = current + resolution
+                  #current = np.floor( (ab-prune_min_k-resolution/2.0)/resolution )*resolution + resolution + prune_min_k
+                  current = np.floor( (ab-prune_min_k+resolution/2.0)/resolution )*resolution + prune_min_k
+
           bins.append(current)
           binvecs = []
           ibin += 1
+      if debug: print('bin {}, |k| {}'.format(current,ab))
       binvecs.extend(orderedVecList[ia])
 
   finalmesh.extend(binvecs)
+  finalmesh_binned.append(binvecs)
   #bins.append(histabcissae[-1])
 
   nk3d = np.shape(finalmesh)[0]
   modklist = np.zeros(nk3d)
   for ik,kvec in enumerate(finalmesh):
       modklist[ik] = np.linalg.norm(kvec)
+  
+  # === alternative if we use the bin-centered |k| values instead of the exact |k| of the retained vectors ... ===
+  # CURRENTLY NOT USED!
+  '''
+  nk3d = 0
+  modklist2 = []
+  finalmesh2 = [] 
+  for ib,kmag in enumerate(bins):
+    for kvec in finalmesh_binned[ib]:
+        finalmesh2.append(kvec)
+        modklist2.append(kmag)
+        nk3d += 1 
+
+  if debug:
+      print(finalmesh)
+      print(finalmesh2)
+      print(modklist)
+      print(modklist2)
+  '''
 
   # === closing ===
   print("Originally had {} vecs, pruned down to {}.".format(np.shape(kmesh3d)[0],nk3d))
@@ -421,9 +470,11 @@ if __name__ == "__main__":
     parser.add_argument('-p', '--topfile', action='store',type=str,default='top.pdb',help='topology file')
     parser.add_argument('--pruneRes', action='store',type=float, default = 0, help = 'pruning bin resolution')
     parser.add_argument('--pruneNum', action='store',type=int, default = 50, help = 'max number of wave vectors for each pruned bin')
+    parser.add_argument('--pruneMinK', action='store',type=float, default = 2.5, help = 'minimum k under which to prune')
     parser.add_argument('-d', '--SaveDir', action='store',type=str,default='SK',help='save directory for outputs')
     parser.add_argument('-np', '--nProcessors', action='store',type=int,default=1,help='Number of processors to pll frames across')
     parser.add_argument('-ch', '--perchain', action='store_true',help='whether to calculate on per-chain basis, default False')
+    parser.add_argument('--debug', action='store_true',help='whether to print verbose debug statements')
     
     sphcut = True # Use a spherical kmesh
     args = parser.parse_args()
@@ -469,7 +520,10 @@ if __name__ == "__main__":
     natoms = traj.n_atoms
     print( " - nAtoms = {}".format(natoms))
 
-    types = set([a.name for a in top.atoms])
+    types = [a.name for a in top.atoms]
+    #get unique atom names, https://www.peterbe.com/plog/fastest-way-to-uniquify-a-list-in-python-3.6
+    seen = set()
+    types = [x for x in types if x not in seen and not seen.add(x)]
     typedict = {}
     for it,t in enumerate(types):
         typedict[t] = it+1
@@ -500,7 +554,7 @@ if __name__ == "__main__":
     #
     if args.pruneRes > 0.0:
         print("Pruning kmesh because too many...")
-        kmesh3d, modklist, nk3d = pruneKmesh( kmesh3d, modklist, resolution = args.pruneRes, n_per_bin = args.pruneNum )
+        kmesh3d, modklist, nk3d = pruneKmesh( kmesh3d, modklist, resolution = args.pruneRes, n_per_bin = args.pruneNum, prune_min_k = args.pruneMinK, debug=args.debug )
 
 
     # === Generate the histogram mapping ===
@@ -509,7 +563,7 @@ if __name__ == "__main__":
     #   histogram index returns a list of 3d mesh points that map to it, then we will not need
     #   to store S(k) on the full mesh
     print("Generating histogram mapping")
-    histmapper, histabcissae, histndegen, sortindex3d, orderedVecList = histogrammapping(kmesh3d, modklist, debug=False)
+    histmapper, histabcissae, histndegen, sortindex3d, orderedVecList = histogrammapping(kmesh3d, modklist, debug=args.debug)
 
     ''' ***** PARALLEL STUFF ****** '''
     import threading
