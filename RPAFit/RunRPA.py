@@ -5,12 +5,14 @@ import matplotlib.pyplot as plt
 import RPAFit 
 from RPAFit import OmegaTest, InvSqNcVsChiNTest, SqPeakFitTest
 
-# Run OmegaTest to check AB diblock code
-OmegaTest()
-# Run SqInvNc vs ChiN to check AB diblock code
-InvSqNcVsChiNTest()
-# Run SqPeakFitTest, again a test of the AB diblock code
-SqPeakFitTest()
+RunTest = False
+if RunTest:
+    # Run OmegaTest to check AB diblock code
+    OmegaTest()
+    # Run SqInvNc vs ChiN to check AB diblock code
+    InvSqNcVsChiNTest()
+    # Run SqPeakFitTest, again a test of the AB diblock code
+    SqPeakFitTest()
 
 # USER INPUTS #
 
@@ -207,7 +209,7 @@ for _i, _scale in enumerate(scalef):
         RPA.UseDGC = False # only the AA and BB stucture factors
         RPA.ChiParams = [0.00] # initial guess for chi
         RPA.SaveName = 'SqAB_Diblock_RPA.dat'
-        RPA.FitRPA()
+        RPA.FitRPA(UseNoise=False,StdDev=[0.005,0.01,0.025,0.05,0.075,0.1,0.15,0.25],NumberSamples=250,ScaleAverage=True)
         temp_data.extend([round(RPA.ChiParams[0],4),round(RPA.ChiParams[0]/RPA.Vo,3),round(RPA.FitError,4)])
 
         # use chi that is q-dependent (a quadratic function) to fit only the peak height
@@ -235,7 +237,7 @@ for _i, _scale in enumerate(scalef):
         RPA.NonLinearChi = False
         RPA.ChiParams = [0.00] # initial guess for chi
         RPA.SaveName = 'SqAB_Diblock_RPA_Omega.dat'
-        RPA.FitRPA()
+        RPA.FitRPA(UseNoise=True,StdDev=[0.001,0.005,0.01,0.025,0.05,0.075,0.1,0.15,0.25],NumberSamples=1000,ScaleAverage=True)
         temp_data.extend([round(RPA.ChiParams[0],4),round(RPA.ChiParams[0]/RPA.Vo,3),round(RPA.FitError,4)])
 
         ''' Plot RPA Fits '''
@@ -243,13 +245,13 @@ for _i, _scale in enumerate(scalef):
         RPAdata = np.loadtxt('SqAB_Diblock_RPA.dat')
         RPAmax = np.loadtxt('SqAB_Diblock_RPA_fitSqmax.dat')
         RPAOmega = np.loadtxt('SqAB_Diblock_RPA_Omega.dat')
+        RPAOmegaNoise = np.loadtxt('SqAB_Diblock_RPA_Omega_Noise_Avg_StdDev_0.1.dat')
+        #RPAOmega = np.loadtxt('SqAB_Diblock_RPA_Omega.dat')
         print("MD q--> inf. S(q) asymptote:")
         print(1./vtot/(1./va+1./vb)**2)
         SqRPA_inf = 1./(1./(phi_a*va) + 1./(phi_b*vb) - 2.*RPA.ChiParams[0]/RPA.Vo)
         SqMD_inf = 1./vtot/(1./va+1./vb)**2
-
-        
-        
+      
         
         plt.plot(Smd[:,0],Smd[:,1],'ko',label='MD')
         plt.plot(RPAdata[1:,0],RPAdata[1:,1],'r-',label='RPA')
@@ -274,6 +276,33 @@ for _i, _scale in enumerate(scalef):
         plt.ylabel('S(k)')
         plt.xlabel('k [1/nm]')
         plt.savefig('RPA_loglog.png',format='png')
+        if showfigs: plt.show()
+        plt.close()
+
+        pluserr = RPAOmegaNoise[1:,1] + 1*RPAOmegaNoise[1:,2]
+        minuserr = RPAOmegaNoise[1:,1] - 1*RPAOmegaNoise[1:,2]
+
+        plt.plot(Smd[:,0],Smd[:,1],'ko',label='MD')
+        plt.plot(RPAOmega[1:,0],RPAOmega[1:,1],'g-',label='RPA')
+        plt.plot(RPAOmegaNoise[1:,0],RPAOmegaNoise[1:,1],'b-',label='RPA Noise')
+        plt.plot(RPAOmegaNoise[1:,0],pluserr,'r--')
+        plt.plot(RPAOmegaNoise[1:,0],minuserr,'r--')
+        plt.legend()
+        plt.ylabel('S(k)')
+        plt.xlabel('k [1/nm]')
+        plt.savefig('RPA_Omega_Noise.png',format='png')
+        if showfigs: plt.show()
+        plt.close()
+        
+        plt.loglog(Smd[:,0],Smd[:,1],'ko',label='MD')
+        plt.loglog(RPAOmega[1:,0],RPAOmega[1:,1],'g-',label='RPA')
+        plt.loglog(RPAOmegaNoise[1:,0],RPAOmegaNoise[1:,1],'b-',label='RPA Noise')
+        plt.loglog(RPAOmegaNoise[1:,0],pluserr,'r--')
+        plt.loglog(RPAOmegaNoise[1:,0],minuserr,'r--')
+        plt.legend()
+        plt.ylabel('S(k)')
+        plt.xlabel('k [1/nm]')
+        plt.savefig('RPA_Omega_Noise_loglog.png',format='png')
         if showfigs: plt.show()
         plt.close()
                
