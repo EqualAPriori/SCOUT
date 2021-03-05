@@ -814,7 +814,7 @@ class RPA():
         # reset self.SqData
         self.SqData[:,1] = _ActualSqData[:,1]
 
-    def FitRPA(self,UseNoise=False,StdDev=0.1,NumberSamples=100,ScaleAverage=True):
+    def FitRPA(self,UseNoise=False,StdDev=[0.01],NumberSamples=100,ScaleAverage=True):
         ''' Fit RPA model to S(q) data. 
         
         '''
