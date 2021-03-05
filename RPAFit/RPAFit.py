@@ -782,7 +782,7 @@ class RPA():
         plt.plot(_ChiStats[:,0],_ChiStats[:,3],'b-')
         plt.legend()
         plt.ylabel('$\chi$')
-        plt.xlabel('Std. Dev.')
+        plt.xlabel('$\sigma$')
         plt.savefig((_savename[0]+'_Chi_Noise.png'),format='png')
         plt.close()
 
@@ -791,8 +791,24 @@ class RPA():
         plt.errorbar(_ChiStats[:,0],_ChiStats[:,1],yerr=_ChiStats[:,2],fmt="ko-",markersize=5.,elinewidth=2.,ecolor='r')
         plt.legend()
         plt.ylabel('$\chi$')
-        plt.xlabel('Std. Dev.')
+        plt.xlabel('$\sigma$')
         plt.savefig((_savename[0]+'_Chi_Noise_semilogx.png'),format='png')
+        plt.close()
+
+        plt.semilogx(_ChiStats[:,0],np.abs(_ChiStats[:,2]/_ChiStats[:,1]),"ko-",markersize=5.,label='chi')
+        plt.semilogx(_ChiStats[:,0],np.abs(_ChiStats[:,2]/_ChiStats[:,3]),'b-',label='base chi')
+        plt.legend()
+        plt.ylabel('$\sigma/|\chi|$')
+        plt.xlabel('$\sigma$')
+        plt.savefig((_savename[0]+'_StdDevNorm_Noise_semilogx.png'),format='png')
+        plt.close()
+
+        plt.loglog(_ChiStats[:,0],np.abs(_ChiStats[:,2]/_ChiStats[:,1]),"ko-",markersize=5.,label='chi')
+        plt.loglog(_ChiStats[:,0],np.abs(_ChiStats[:,2]/_ChiStats[:,3]),'b-',label='base chi')
+        plt.legend()
+        plt.ylabel('$\sigma/|\chi|$')
+        plt.xlabel('$\sigma$')
+        plt.savefig((_savename[0]+'_StdDevNorm_Noise_loglog.png'),format='png')
         plt.close()
 
         # reset self.SqData
