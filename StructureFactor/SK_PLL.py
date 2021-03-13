@@ -16,7 +16,7 @@
 #    parallelize frames accross CPU cores.
 # 2) Removed usage of skip. Now warmup and stride options provided,and
 #    and handled by mdtraj when loading in the trajectory.
-# 3) Included section to account for if NPT, i.e., varying box size: takes maximum unitcell dimension      
+# 3) Included section to account for if NPT, i.e., varying box size: takes minimum unitcell dimension      
 #
 
 
@@ -29,6 +29,10 @@ import shutil
 import time
 import os
 import sys
+import inspect
+scriptdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+sys.path.insert(1,scriptdir)
+import analyze_series
 
 ''' ProgressBar Class '''
 
@@ -160,11 +164,11 @@ def histogrammapping(mesh, modveclist, debug=False):
   nparray
       histmapper, 3d mesh index, mapping to the 1d mesh index
   nparray
-      histabcissae, 1d index, returning the magnitude of the sampled k-vectors
+      histabcissae, 1d index, returning the magnitude of the sampled k-vectors. i.e. many-to-one, mapping from a magnitude-sorted index list.
   nparray
       histndegen, 1d index, return #3d points that map to the particular k-vec-magnitude
   int
-      index, indices that sort the vector magnitude list
+      index, indices that sort the vector magnitude list. I.e. the input mesh may be unsorted, but mesh[index] will give a sorted array.
   nparray
       orderedVecList, same indices as histabcissae, the vectors that map to each k-vec-magnitude
   """
@@ -474,7 +478,9 @@ if __name__ == "__main__":
     parser.add_argument('-d', '--SaveDir', action='store',type=str,default='SK',help='save directory for outputs')
     parser.add_argument('-np', '--nProcessors', action='store',type=int,default=1,help='Number of processors to pll frames across')
     parser.add_argument('-ch', '--perchain', action='store_true',help='whether to calculate on per-chain basis, default False')
+    parser.add_argument('-f', '--keepframes', action='store_true',help='whether to keep SK data of each frame explicitly')
     parser.add_argument('--debug', action='store_true',help='whether to print verbose debug statements')
+    parser.add_argument('-b', '--boxmode', default='avg', choices=['min','max','avg'],help='treatment of box size if NPT. "min","max","avg"')
     
     sphcut = True # Use a spherical kmesh
     args = parser.parse_args()
@@ -530,12 +536,26 @@ if __name__ == "__main__":
     nspec = len(types)
     
     # Search for the minimum and maximum dimensions in the trajectory, i.e., if NPT 
+    # 2021.02.28 documentation: assumes
+    # - cube
+    # - one corner of the box is @ origin (hence Lmin = 0, see the Lammps parser for Kris's naming convention)
+    # - 
     Lmin = 0
-    Lmax = traj[0].unitcell_lengths[0][0] #assuming cubic for now
-    Lmins = np.amin(traj.unitcell_lengths,axis=0)
-    print("Minimum Cell Dimenstions: {}".format(Lmins))
-    Lmax = np.amin(Lmins)
+    if args.boxmode == 'min':
+      L_smallest_per_dim = np.amin(traj.unitcell_lengths,axis=0) #get minimum box side along each dimension, i.e. if rectangular
+      print("Minimum Cell Dimensions: {}".format(L_smallest_per_dim))
+      Lmax = np.amin(L_smallest_per_dim) #really only if box is rectangular, to get a single dimension out. Even then, need to update mesh generation
+    elif args.boxmode == 'max':
+      L_largest_per_dim = np.amax(traj.unitcell_lengths,axis=0) #get maximum box side along each dimension, i.e. if rectangular
+      print("Maximum Cell Dimensions: {}".format(L_largest_per_dim))
+      Lmax = np.amin(L_largest_per_dim) #really only if box is rectangular, to get a single dimension out. Even then, need to update mesh generation 
+    else:
+      L_avg_per_dim = np.mean(traj.unitcell_lengths,axis=0) #get maximum box side along each dimension, i.e. if rectangular
+      print("Average Cell Dimensions: {}".format(L_avg_per_dim))
+      Lmax = np.amin(L_avg_per_dim) #really only if box is rectangular, to get a single dimension out. Even then, need to update mesh generation 
+      
     print("Setting Lmax to: {}".format(Lmax))
+    print("cube box volume: {}".format(Lmax**3.0))
     print("Number of Frames: {}".format(traj.n_frames))
 
     if args.spec1 > nspec or args.spec2 > nspec:
@@ -619,14 +639,16 @@ if __name__ == "__main__":
     #for iframe,frame in enumerate(traj):
     
     def CalcSK(frames,SK,pID,typedict,kmesh3d,nspec,histabcissae,fullMatrix,histmapper,
-                histndegen,spec1,spec2,PBar,nk3d,SaveDir,lock,SKtotal,chain=None):
+                histndegen,spec1,spec2,PBar,nk3d,SaveDir,lock,SKtotal,chain=None,frame_indices=None):
         
         # === Initialize the structure factor ===
         if fullMatrix:
             SK = np.zeros([nspec,nspec,nk3d]) # TODO: exploit symmetry in species indices - a packed storage format with mapping
+            SKframe = np.zeros([nspec,nspec,nk3d])
             #SK = shared_array([nspec,nspec,nk3d]) # shared trajectory positions
         else:
             SK = np.zeros([1,1,nk3d])
+            SKframe = np.zeros([1,1,nk3d])
         
         natoms = frames.n_atoms
         top = frames.topology
@@ -642,6 +664,11 @@ if __name__ == "__main__":
         _start = time.time()
         
         for _indx, frame in enumerate(frames): # loop through frames for this process
+            if frame_indices is not None: #should be an array
+                frame_index = frame_indices[_indx]
+                skframefile = open(os.path.join(SaveDir,"sk_f{:07d}{}.dat".format(frame_index,suffix)),"w")
+                keep_frames = True
+
             iframe = _indx
             pcoord = np.zeros([3])
             CI = np.zeros([nspec,nk3d])
@@ -673,45 +700,76 @@ if __name__ == "__main__":
             skfile = open(os.path.join(SaveDir,"sk_pID_{}{}.dat".format(pID,suffix)),"w")
             
             if fullMatrix:
+                if keep_frames:
+                    SKframe[:] = 0
+                    SKhistframe = np.zeros([nspec,nspec,len(histabcissae)])
+
                 skfile.write("# |k|")
+                if keep_frames: skframefile.write("# |k|")
                 for i in range(nspec):
                     for j in range(nspec):
                         skfile.write(" S{}{}(k)".format(i+1,j+1)) #part of header
                         SK[i][j] += CI[i]*CI[j] + SI[i]*SI[j]
+                        if keep_frames:
+                            skframefile.write(" S{}{}(k)".format(i+1,j+1)) #part of header
+                            SKframe[i][j] += CI[i]*CI[j] + SI[i]*SI[j]
                 skfile.write("\t TypeMap: {}".format(typedict)) #species mapping
                 skfile.write("\n")
+                if keep_frames:
+                    skframefile.write("\t TypeMap: {}".format(typedict)) #species mapping
+                    skframefile.write("\n")
                 
                 SKhist=np.zeros([nspec,nspec,len(histabcissae)])
                 for i in range(nspec):
                     for j in range(nspec):
                         for ik in range(nk3d):
                             SKhist[i][j][histmapper[ik]] += SK[i][j][sortindex3d[ik]]
+                            if keep_frames:
+                                SKhistframe[i][j][histmapper[ik]] += SKframe[i][j][sortindex3d[ik]]
                 # Write
                 for ik in range(1,len(histabcissae)): # Start at idx=1 -- miss k=0
                     skfile.write("{}".format(histabcissae[ik]))
+                    if keep_frames: skframefile.write("{}".format(histabcissae[ik]))
                     for i in range(nspec):
                         for j in range(nspec):
                             skfile.write(" {}".format(SKhist[i][j][ik]/histndegen[ik]/SKnavg/natoms))
+                            if keep_frames: skframefile.write(" {}".format(SKhistframe[i][j][ik]/histndegen[ik]/natoms))
                     skfile.write("\n")
+                    if keep_frames: skframefile.write("\n")
             else:
+                if keep_frames:
+                    SKframe[:] = 0
+                    SKhistframe = np.zeros([len(histabcissae)])
+                    
                 if spec1 == spec2:
                     skfile.write(" S{}{}(k)\n".format(spec1,spec1))
                     SK[0][0] += np.square(CI[spec1-1]) + np.square(SI[spec1-1])
+                    if keep_frames:
+                        skframefile.write(" S{}{}(k)\n".format(spec1,spec1))
+                        SKframe[0][0] += np.square(CI[spec1-1]) + np.square(SI[spec1-1])
                 else:
                     skfile.write(" S{}{}(k)\n".format(spec1,spec2))
                     SK[0][0] += CI[spec1-1]*CI[spec2-1] + SI[spec1-1]*SI[spec2-1]
+                    if keep_frames:
+                        skframefile.write(" S{}{}(k)\n".format(spec1,spec2))
+                        SKframe[0][0] += CI[spec1-1]*CI[spec2-1] + SI[spec1-1]*SI[spec2-1]
 
                 SKhist=np.zeros([len(histabcissae)])
                 for ik in range(nk3d):
                     SKhist[histmapper[ik]] += SK[0][0][sortindex3d[ik]]
+                    if keep_frames:
+                        SKhistframe[histmapper[ik]] += SKframe[0][0][sortindex3d[ik]]
                 for ik in range(1,len(histabcissae)): # Start at idx=1 -- miss k=0
                     skfile.write("{} {}\n".format(histabcissae[ik], SKhist[ik]/histndegen[ik]/SKnavg/natoms))
+                    if keep_frames: skframefile.write("{} {}\n".format(histabcissae[ik], SKhistframe[ik]/histndegen[ik]/natoms))
 
             skfile.close()
+            if keep_frames:
+                skframefile.close()
             
             p_log = open(os.path.join(SaveDir,"Log_pID_{}{}.dat".format(pID,suffix)),"a")
             p_log.write('Frame {}'.format(iframe))
-            p_log.write( ' Average time / frame: {}\n'.format((time.time() - _start) / (iframe+1)) )
+            p_log.write(' Average time / frame: {}\n'.format((time.time() - _start) / (iframe+1)) )
             p_log.close()
             
     
@@ -719,7 +777,7 @@ if __name__ == "__main__":
     
     # Split up the residues onto the different processes 
     # Loop over chains if needed
-    def CalcSK_PLL(traj_chain,chain=None):
+    def CalcSK_PLL(traj_chain,chain=None,keep_frames=False):
         print('n_atoms in slice: {}'.format(traj_chain.n_atoms))
         start = time.time()
         _npt_current = 0
@@ -734,6 +792,10 @@ if __name__ == "__main__":
             _range = np.linspace(_npt_current,_npt_current+_npt-1,_npt,dtype='int64')
             _npt_current += _npt
             _frames = traj_chain.slice(_range)
+            if keep_frames:
+                frame_indices = _range
+            else:
+                frame_indices = None
             
             if Verbose: # for troubleshooting
                 if _i == 0:
@@ -745,7 +807,7 @@ if __name__ == "__main__":
             temp_range.append(_range)
             pID = _i
             _p = mp.Process(target=CalcSK, args=(_frames,SK,pID,typedict,kmesh3d,nspec,histabcissae,fullMatrix,
-                            histmapper,histndegen,args.spec1,args.spec2,PBar,nk3d,SaveDir,lock,SKtotal,chain))
+                            histmapper,histndegen,args.spec1,args.spec2,PBar,nk3d,SaveDir,lock,SKtotal,chain,frame_indices))
             
             processes.append(_p)
 
@@ -764,19 +826,19 @@ if __name__ == "__main__":
         print('Outputting Final Stats...')
         
     if args.perchain is False:
-        CalcSK_PLL(traj)
+        CalcSK_PLL(traj,keep_frames=args.keepframes)
     else:
         for chainid,chain in enumerate(traj.topology.chains):
             print('=== Working on chain {} ==='.format(chainid))
             atomids = traj.topology.select('chainid {}'.format(chainid))
             print(atomids)
             traj_chain = traj.atom_slice(atomids)
-            CalcSK_PLL(traj_chain,chainid)
+            CalcSK_PLL(traj_chain,chainid,keep_frames=args.keepframes)
     PBar.Clear()
     
     # === Print out degeneracies, so that we can average different wave-vector points together === #
     metadata = np.vstack([histabcissae, histndegen])
-    np.savetxt('sk.metadat', metadata.T)
+    np.savetxt( os.path.join(SaveDir,"sk.metadat"), metadata.T )
     
     ''' Recombine all the S(Q) files, i.e., average them '''
     def combine_SK(chainid=None):
@@ -828,10 +890,66 @@ if __name__ == "__main__":
         data /= traj.n_atoms
         np.savetxt(os.path.join(SaveDir,"sk_total_perchain.dat"),data,header=header)
 
-        
-            
-    
-  
+    if args.keepframes:
+        prefix = 'sk_f'
+        globstr = os.path.join(SaveDir,"{}*[0-9].dat".format(prefix))
+        print('trying to read in files matching {}'.format(globstr))
+        data,fnames = analyze_series.collect_files(globstr)
+        np.save(os.path.join(SaveDir,'sk_f'),data)
+        data_final = analyze_series.collect_statistics(data)
+ 
+        with open (os.path.join(SaveDir,'sk_total.dat'),'r') as f:
+            header = f.readline()
+        header = header.split('#')[-1].strip()
+        header += '; reporting mean,std,errmean,t0,g,Neff for each i,j species pair, in order' 
+        np.savetxt(os.path.join(SaveDir,'sk_total_stats.dat'),data_final,header=header)          
+
+'''
+    if args.keepframes:    
+        import glob
+        from pymbar import timeseries
+
+        prefix = 'sk_f'
+        fnames = glob.glob(os.path.join(SaveDir,'{}*.dat'.format(prefix)))
+        fnames = sorted(fnames)
+        print(fnames)
+        data = np.array( [ np.loadtxt(fname) for fname in fnames ] ) #should be [nframes X nkentries X entry]
+
+        #get statistics of the frame data
+        nk = data.shape[1]
+        nentries = data.shape[2] - 1
+
+        ks = data[0,:,0]
+
+        def get_statistics(_data):
+            t0,g,Neff = timeseries.detectEquilibration(_data)
+            data_equil = _data[t0:]
+            indices_subsampled = timeseries.subsampleCorrelatedData(data_equil, g=g)
+            sub_data = data_equil[indices_subsampled]
+
+            avg = sub_data.mean()
+            std = sub_data.std()
+            err = sub_data.std()/np.sqrt( len(indices_subsampled) )
+            summary = [avg,std,err,t0,g,Neff]
+            return summary
+
+        data_summarized = np.zeros([nk,nentries*6]) #format is (summary for entry), (summary for next entry), ...
+        for ik in range(nk):
+            for ij in range(nentries):
+                subdata = data[:,ik,ij+1]
+                summary = get_statistics(subdata)
+                data_summarized[ik,ij*6:(ij+1)*6] = summary
+
+        data_final = np.hstack([ np.reshape(ks,[nk,1]), data_summarized ])
+               
+        with open (os.path.join(SaveDir,'sk_total.dat'),'r') as f:
+            header = f.readline()
+
+        header = header.split('#')[-1].strip()
+        header += '; reporting mean,std,errmean,t0,g,Neff for each i,j species pair, in order' 
+        np.savetxt(os.path.join(SaveDir,'sk_total_stats.dat'),data_final,header=header)          
+'''            
+          
 
 
 
