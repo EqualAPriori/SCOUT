@@ -18,7 +18,20 @@
 #    and handled by mdtraj when loading in the trajectory.
 # 3) Included section to account for if NPT, i.e., varying box size: takes minimum unitcell dimension      
 #
-
+# ===
+#
+# Additional features
+# e.g. minK, per chain mode, keeping all frame data, striding, pruning, box mode
+# python ~/mylib/SCOUT/StructureFactor/SK_PLL.py -m 21 -t TrajCOM.dcd -p TrajCOM.pdb -d testkeepframe -np 10 -s 50 -f
+#
+# analyze_series is general purpose script that can be used to aggreate per-frame data, though this is already done in by SK_PLL.py for convenience
+#   python /home/kshen/mylib/SCOUT/StructureFactor/analyze_series.py -p sk_f -o sk_total_stats_test 
+#   python /home/kshen/mylib/SCOUT/StructureFactor/analyze_series.py -p sk_f.py -o sk_total_stats_test 
+#
+# and a general Sab combination script
+#   python /home/kshen/mylib/SCOUT/StructureFactor/CalcSABs.py -p sk_f
+#   python /home/kshen/mylib/SCOUT/StructureFactor/CalcSABs.py -p sk_f.npy
+#
 
 
 import numpy as np
