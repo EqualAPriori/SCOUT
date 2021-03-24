@@ -45,7 +45,6 @@ import sys
 import inspect
 scriptdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 sys.path.insert(1,scriptdir)
-import analyze_series
 
 ''' ProgressBar Class '''
 
@@ -491,7 +490,7 @@ if __name__ == "__main__":
     parser.add_argument('-d', '--SaveDir', action='store',type=str,default='SK',help='save directory for outputs')
     parser.add_argument('-np', '--nProcessors', action='store',type=int,default=1,help='Number of processors to pll frames across')
     parser.add_argument('-ch', '--perchain', action='store_true',help='whether to calculate on per-chain basis, default False')
-    parser.add_argument('-f', '--keepframes', action='store_true',help='whether to keep SK data of each frame explicitly')
+    parser.add_argument('-f', '--keepframes', default=False,action='store_true',help='whether to keep SK data of each frame explicitly')
     parser.add_argument('--debug', action='store_true',help='whether to print verbose debug statements')
     parser.add_argument('-b', '--boxmode', default='avg', choices=['min','max','avg'],help='treatment of box size if NPT. "min","max","avg"')
     
@@ -676,6 +675,7 @@ if __name__ == "__main__":
         
         _start = time.time()
         
+        keep_frames = False
         for _indx, frame in enumerate(frames): # loop through frames for this process
             if frame_indices is not None: #should be an array
                 frame_index = frame_indices[_indx]
@@ -904,6 +904,7 @@ if __name__ == "__main__":
         np.savetxt(os.path.join(SaveDir,"sk_total_perchain.dat"),data,header=header)
 
     if args.keepframes:
+        import analyze_series
         prefix = 'sk_f'
         globstr = os.path.join(SaveDir,"{}*[0-9].dat".format(prefix))
         print('trying to read in files matching {}'.format(globstr))
