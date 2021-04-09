@@ -693,6 +693,112 @@ class RPA():
         savename = _savename[0]+'_Noise_NewSqData.'+_savename[1]
         np.savetxt(savename,np.column_stack((_SqData2Fit[:,0],np.asarray(self.SqDataWNoise).transpose())))
 
+    def GenerateNoiseBootstrap(self,SqData,_scale,_NumberSamples):
+        ''' Generate bootstrapped samples 
+            SqFile: filename of .npy Sq data of each frame of a trajectory. in MD particle-number basis. expect dimensions nframes X nk X 2
+            _scale: the prefactor to take Sq data from MD basis to RPA volume fraction basis.
+            _NumberSamples: # bootstrapped samples to generate
+           
+            Bootstrapping strategy is to use largest t0 and statistical inefficiency to generate subset of data, from which to bootstrap sample
+
+            Thought about getting these inputs, but decided to re-calculate:
+            t0,g,Neff = timeseries.detectEquilibration(_data)
+        '''
+        from pymbar import timeseries
+        # ... first get set of frame_indices ...
+        if isinstance(SqData,str):
+          data = np.load(SqFile) #SqFrames data
+        else:
+          data = SqData
+        nk = data.shape[1]
+        nentries = data.shape[2] - 1
+        ks = data[0,:,0]
+        correlation_stats = np.zeros([nk,3])
+        for ik in range(nk): #get correlation statistics of each wavenumber
+            subdata = data[:,ik,1]
+            _t0,_g,_Neff = timeseries.detectEquilibration(subdata)
+            correlation_stats[ik] = [_t0,_g,_Neff]
+        #get "most uncorrelated" data
+        t0 = np.max(correlation_stats[:,0])
+        g  = np.max(correlation_stats[:,1])
+        frame_indices = timeseries.subsampleCorrelatedData( data[t0:,0,1], g=g )
+
+
+        # ... the bootstrap generation ...
+        # each row is a new sample of Sq
+        _SqDataWNoise = np.zeros((_NumberSamples,len(_SqData2Fit[:,1])))
+       
+        # Generate new data with noise
+        for _i, _StdDev in enumerate(_StdDevs):
+            #_temp_noise = np.random.normal(loc=_SqData2Fit[_i,1],scale=_StdDev,
+            #                                size=(_NumberSamples))
+            _temp_indices = np.random.choice( frame_indices, len(t), replace=True )
+            _SqSubset = data[ _temp_indices,:,1 ] * _scale
+            _temp_noise = np.mean(_SqSubset,0) #should be nk long, one entry per wavenumber
+
+            _SqDataWNoise[:,_i] = _temp_noise
+
+        # save data to variable
+        self.SqDataWNoise = _SqDataWNoise
+        
+        # save generated data
+        _savename = self.SaveName.split('.')
+        savename = _savename[0]+'_Noise_NewSqData.'+_savename[1]
+        np.savetxt(savename,np.column_stack((_SqData2Fit[:,0],np.asarray(self.SqDataWNoise).transpose())))
+
+    def EstChiSens2NoiseBootStrap(self,SqData):
+        ''' Generate estimates of the sensitivity of chi fits to noise in MD data.
+           
+           Still needed: where is prefactor?
+        '''
+        # Generate noise in the data
+        self.GenerateNoiseBootStrap(SqData,prefactor,_NumberSamples)
+
+        # Save SqData and reset after fitting
+        _ActualSqData = self.SqData
+        _q = _ActualSqData[:,0]
+
+        # reset, thus this will override any already generated data
+        self.ChiParamsWNoise = []
+        self.RPASqWNoise = []
+
+        for _i in range(_NumberSamples):
+            _sample = self.SqDataWNoise[_i,:]
+            self.SqData[:,1] = _sample
+            _opt = least_squares(self.Residuals,self.ChiParams,gtol=1e-12,ftol=1e-12)
+            self.ChiParamsWNoise.append(_opt.x[0])
+            
+            # Now generate the RPA S(q) data
+            if self.UseOmega:
+                _q = np.linspace(self.OmegaQRange[0],self.OmegaQRange[1],int(self.OmegaQRange[1]/self.dq))
+
+            _Chi = self.ChiFnx(_q,_opt.x)
+            # TODO: Make general for other architectures
+            _SqAB_Diblock = self.SqAB_Diblock(_q,_Chi) 
+            self.RPASqWNoise.append(_SqAB_Diblock)
+
+        _ChiAvg = np.average(self.ChiParamsWNoise)
+        _ChiStdDev = np.std(self.ChiParamsWNoise)
+        print('Average Chi and Standard Deviation:')
+        print(_ChiAvg)
+        print(_ChiStdDev)
+
+        _RPASqNoiseAvg = np.average(np.asarray(self.RPASqWNoise),axis=0)
+        _RPASqNoiseStd = np.std(np.asarray(self.RPASqWNoise),axis=0)
+        print(_RPASqNoiseAvg.shape)
+
+
+        _savename = self.SaveName.split('.')
+        savename = _savename[0]+'_Noise.'+_savename[1]
+        np.savetxt(savename,np.column_stack((_q,np.asarray(self.RPASqWNoise).transpose())))
+        savename = _savename[0]+'_Noise_Avg.'+_savename[1]
+        np.savetxt(savename,np.column_stack((_q,_RPASqNoiseAvg,_RPASqNoiseStd)))
+        
+        # reset self.SqData
+        self.SqData[:,1] = _ActualSqData[:,1]
+
+
+
     def EstChiSens2Noise(self,_StdDev,_NumberSamples,_ScaleAverage):
         ''' Generate estimates of the sensitivity of chi fits to noise in MD data.
             
