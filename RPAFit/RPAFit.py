@@ -18,7 +18,7 @@ import scipy.stats
 import math
 import mdtraj as md
 import matplotlib as mpl
-mpl.use('Agg')
+#mpl.use('Agg')
 mpl.rcParams['axes.linewidth'] = 2.0
 mpl.rcParams['axes.edgecolor'] = 'black'
 mpl.rcParams['figure.dpi'] = '300'
@@ -124,7 +124,7 @@ class RPA():
             pickle.dump(self,outfile)
             
 
-    def LoadRPAObj(self, _name: str):
+    def LoadRPAObj(self, _name):
         ''' Generates an RPA object from pickle file.
         
             _name = file name of .pickle
@@ -707,36 +707,37 @@ class RPA():
         from pymbar import timeseries
         # ... first get set of frame_indices ...
         if isinstance(SqData,str):
-          data = np.load(SqFile) #SqFrames data
+          data = np.load(SqData) #SqFrames data
         else:
           data = SqData
-        nk = data.shape[1]
         nentries = data.shape[2] - 1
-        ks = data[0,:,0]
+        ks = data[0,self.MDSqDataIndices,0]
+        nk = len(ks)
+        data = data[:,self.MDSqDataIndices,:]
         correlation_stats = np.zeros([nk,3])
         for ik in range(nk): #get correlation statistics of each wavenumber
             subdata = data[:,ik,1]
             _t0,_g,_Neff = timeseries.detectEquilibration(subdata)
             correlation_stats[ik] = [_t0,_g,_Neff]
         #get "most uncorrelated" data
-        t0 = np.max(correlation_stats[:,0])
+        t0 = int(np.max(correlation_stats[:,0]))
         g  = np.max(correlation_stats[:,1])
         frame_indices = timeseries.subsampleCorrelatedData( data[t0:,0,1], g=g )
 
 
         # ... the bootstrap generation ...
         # each row is a new sample of Sq
-        _SqDataWNoise = np.zeros((_NumberSamples,len(_SqData2Fit[:,1])))
+        _SqDataWNoise = np.zeros((_NumberSamples,nk))
        
         # Generate new data with noise
-        for _i, _StdDev in enumerate(_StdDevs):
+        for _i in range(_NumberSamples):
             #_temp_noise = np.random.normal(loc=_SqData2Fit[_i,1],scale=_StdDev,
             #                                size=(_NumberSamples))
-            _temp_indices = np.random.choice( frame_indices, len(t), replace=True )
+            _temp_indices = np.random.choice( frame_indices, len(frame_indices), replace=True )
             _SqSubset = data[ _temp_indices,:,1 ]
             _temp_noise = np.mean(_SqSubset,0) #should be nk long, one entry per wavenumber
 
-            _SqDataWNoise[:,_i] = _temp_noise
+            _SqDataWNoise[_i,:] = _temp_noise
 
         # save data to variable
         self.SqDataWNoise = _SqDataWNoise
@@ -744,13 +745,13 @@ class RPA():
         # save generated data
         _savename = self.SaveName.split('.')
         savename = _savename[0]+'_Noise_NewSqData.'+_savename[1]
-        np.savetxt(savename,np.column_stack((_SqData2Fit[:,0],np.asarray(self.SqDataWNoise).transpose())))
+        np.savetxt(savename,np.column_stack((ks,np.asarray(self.SqDataWNoise).transpose())))
 
-    def EstChiSens2NoiseBootStrap(self,SqData):
+    def EstChiSens2NoiseBootstrap(self,SqData,_NumberSamples):
         ''' Generate estimates of the sensitivity of chi fits to noise in MD data.
         '''
         # Generate noise in the data
-        self.GenerateNoiseBootStrap(SqData,prefactor,_NumberSamples)
+        self.GenerateNoiseBootstrap(SqData,_NumberSamples)
 
         # Save SqData and reset after fitting
         _ActualSqData = self.SqData
@@ -1041,7 +1042,7 @@ class RPA():
             _SqAB_Diblock = self.SqAB_Diblock(_q,_Chi,_SaveIntraChainSq=True) 
             np.savetxt(self.SaveName,np.column_stack((_q,_SqAB_Diblock)))
             if isinstance(UseNoise,str):
-                self.EstChiSens2NoiseBootstrap(UseNoise)
+                self.EstChiSens2NoiseBootstrap(UseNoise,NumberSamples)
             elif UseNoise:
                 self.EstChiSens2NoiseV2(StdDev,NumberSamples,ScaleAverage)
         

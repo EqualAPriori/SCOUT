@@ -2,7 +2,7 @@ import os
 import numpy as np
 import scipy as sp
 import matplotlib.pyplot as plt
-import RPAFit 
+import RPAFit
 from RPAFit import OmegaTest, InvSqNcVsChiNTest, SqPeakFitTest
 
 RunTest = False
@@ -26,12 +26,12 @@ scalef = [1.0] # [0.75,0.9,1.0,1.1,1.25]
 param2scale = ['va','vb','vtot','b_a','b_b','qmaxFit']
 # General settings
 showfigs = False
-vtotset = 0.1902 # nm**3/seg. in the MD simulation
+vtotset = 1629.22871655/(235.*40.) # nm**3/seg. in the MD simulation
 # Flags for flipping the total Sq and/or the Omega data
 TotalSqLikeFlipped = False
 OmegaLikeFlipped = True
 # File name for backup (.json and .pickle)
-_backupfilename = 'T_225_L_008_nPS_020_npmPS_020_NPT'
+_backupfilename = 'backup'#'T_225_L_008_nPS_020_npmPS_020_NPT'
 
 _data = []
 wkdir = os.getcwd()
@@ -63,7 +63,7 @@ for _i, _scale in enumerate(scalef):
         _N = 20
         _Na = _N
         _Nb = _N
-        _fa = _Na/(_Na+_Nb)
+        _fa = float(_Na)/float(_Na+_Nb)
         _fb = (1.-_fa)
         
         b_a = 0.942/np.sqrt(20) # Rg PS melt from 20mer
@@ -240,10 +240,12 @@ for _i, _scale in enumerate(scalef):
         RPA.NonLinearChi = False
         RPA.ChiParams = [0.00] # initial guess for chi
         RPA.SaveName = 'SqAB_Diblock_RPA_Omega.dat'
+
         if Bootstrap:
-            RPA.FitRPA(UseNoise = bootstrap_file)
+            RPA.FitRPA(UseNoise = os.path.join(wkdir,bootstrap_file), NumberSamples=NumberSamples )
         else:
             RPA.FitRPA(UseNoise=True,StdDev=[0.001,0.005,0.01,0.025,0.05,0.075,0.1,0.15,0.25],NumberSamples=1000,ScaleAverage=True)
+
         temp_data.extend([round(RPA.ChiParams[0],4),round(RPA.ChiParams[0]/RPA.Vo,3),round(RPA.FitError,4)])
 
         ''' Plot RPA Fits '''
