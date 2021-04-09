@@ -6,6 +6,9 @@ import RPAFit
 from RPAFit import OmegaTest, InvSqNcVsChiNTest, SqPeakFitTest
 
 RunTest = False
+Bootstrap = True
+bootstrap_file = 'sk_f_combined.npy'
+
 if RunTest:
     # Run OmegaTest to check AB diblock code
     OmegaTest()
@@ -237,7 +240,10 @@ for _i, _scale in enumerate(scalef):
         RPA.NonLinearChi = False
         RPA.ChiParams = [0.00] # initial guess for chi
         RPA.SaveName = 'SqAB_Diblock_RPA_Omega.dat'
-        RPA.FitRPA(UseNoise=True,StdDev=[0.001,0.005,0.01,0.025,0.05,0.075,0.1,0.15,0.25],NumberSamples=1000,ScaleAverage=True)
+        if Bootstrap:
+            RPA.FitRPA(UseNoise = bootstrap_file)
+        else:
+            RPA.FitRPA(UseNoise=True,StdDev=[0.001,0.005,0.01,0.025,0.05,0.075,0.1,0.15,0.25],NumberSamples=1000,ScaleAverage=True)
         temp_data.extend([round(RPA.ChiParams[0],4),round(RPA.ChiParams[0]/RPA.Vo,3),round(RPA.FitError,4)])
 
         ''' Plot RPA Fits '''
@@ -245,7 +251,10 @@ for _i, _scale in enumerate(scalef):
         RPAdata = np.loadtxt('SqAB_Diblock_RPA.dat')
         RPAmax = np.loadtxt('SqAB_Diblock_RPA_fitSqmax.dat')
         RPAOmega = np.loadtxt('SqAB_Diblock_RPA_Omega.dat')
-        RPAOmegaNoise = np.loadtxt('SqAB_Diblock_RPA_Omega_Noise_Avg_StdDev_0.1.dat')
+        if Bootstrap:
+            RPAOmegaNoise = np.loadtxt('SqAB_Diblock_RPA_Omega_Bootstrap_Avg.dat')
+        else:
+            RPAOmegaNoise = np.loadtxt('SqAB_Diblock_RPA_Omega_Noise_Avg_StdDev_0.1.dat')
         #RPAOmega = np.loadtxt('SqAB_Diblock_RPA_Omega.dat')
         print("MD q--> inf. S(q) asymptote:")
         print(1./vtot/(1./va+1./vb)**2)

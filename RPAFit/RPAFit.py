@@ -693,16 +693,16 @@ class RPA():
         savename = _savename[0]+'_Noise_NewSqData.'+_savename[1]
         np.savetxt(savename,np.column_stack((_SqData2Fit[:,0],np.asarray(self.SqDataWNoise).transpose())))
 
-    def GenerateNoiseBootstrap(self,SqData,_scale,_NumberSamples):
+    def GenerateNoiseBootstrap(self,SqData,_NumberSamples):
         ''' Generate bootstrapped samples 
             SqFile: filename of .npy Sq data of each frame of a trajectory. in MD particle-number basis. expect dimensions nframes X nk X 2
-            _scale: the prefactor to take Sq data from MD basis to RPA volume fraction basis.
             _NumberSamples: # bootstrapped samples to generate
            
             Bootstrapping strategy is to use largest t0 and statistical inefficiency to generate subset of data, from which to bootstrap sample
 
             Thought about getting these inputs, but decided to re-calculate:
             t0,g,Neff = timeseries.detectEquilibration(_data)
+            _scale: the prefactor to take Sq data from MD basis to RPA volume fraction basis.
         '''
         from pymbar import timeseries
         # ... first get set of frame_indices ...
@@ -733,7 +733,7 @@ class RPA():
             #_temp_noise = np.random.normal(loc=_SqData2Fit[_i,1],scale=_StdDev,
             #                                size=(_NumberSamples))
             _temp_indices = np.random.choice( frame_indices, len(t), replace=True )
-            _SqSubset = data[ _temp_indices,:,1 ] * _scale
+            _SqSubset = data[ _temp_indices,:,1 ]
             _temp_noise = np.mean(_SqSubset,0) #should be nk long, one entry per wavenumber
 
             _SqDataWNoise[:,_i] = _temp_noise
@@ -748,8 +748,6 @@ class RPA():
 
     def EstChiSens2NoiseBootStrap(self,SqData):
         ''' Generate estimates of the sensitivity of chi fits to noise in MD data.
-           
-           Still needed: where is prefactor?
         '''
         # Generate noise in the data
         self.GenerateNoiseBootStrap(SqData,prefactor,_NumberSamples)
@@ -764,7 +762,7 @@ class RPA():
 
         for _i in range(_NumberSamples):
             _sample = self.SqDataWNoise[_i,:]
-            self.SqData[:,1] = _sample
+            self.SqData[:,1] = _sample * self.MDDataScale
             _opt = least_squares(self.Residuals,self.ChiParams,gtol=1e-12,ftol=1e-12)
             self.ChiParamsWNoise.append(_opt.x[0])
             
@@ -789,9 +787,9 @@ class RPA():
 
 
         _savename = self.SaveName.split('.')
-        savename = _savename[0]+'_Noise.'+_savename[1]
+        savename = _savename[0]+'_Bootstrap.'+_savename[1]
         np.savetxt(savename,np.column_stack((_q,np.asarray(self.RPASqWNoise).transpose())))
-        savename = _savename[0]+'_Noise_Avg.'+_savename[1]
+        savename = _savename[0]+'_Bootstrap_Avg.'+_savename[1]
         np.savetxt(savename,np.column_stack((_q,_RPASqNoiseAvg,_RPASqNoiseStd)))
         
         # reset self.SqData
@@ -1042,8 +1040,9 @@ class RPA():
             _Chi = self.ChiFnx(_q,self.ChiParams)
             _SqAB_Diblock = self.SqAB_Diblock(_q,_Chi,_SaveIntraChainSq=True) 
             np.savetxt(self.SaveName,np.column_stack((_q,_SqAB_Diblock)))
-
-            if UseNoise:
+            if isinstance(UseNoise,str):
+                self.EstChiSens2NoiseBootstrap(UseNoise)
+            elif UseNoise:
                 self.EstChiSens2NoiseV2(StdDev,NumberSamples,ScaleAverage)
         
             
