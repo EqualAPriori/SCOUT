@@ -63,6 +63,7 @@ class RPA():
         self.Arch           = arch
         self.Solvent        = solvent    
         self.SqData         = None    
+        self.MDSqDataIndices= [] # List of the MD data indices used
         self.SpeciesData    = [] # List of dictionaries for each species
         self.Vo             = 100. # reference segment volume, nm**3
         self.qmin           = 0.0001
@@ -91,6 +92,7 @@ class RPA():
         self.ChiParamsWNoise= [] # list of chi-parameters from each sample fit
         self.RPASqWNoise    = [] # list of RPA fits with noise
         self.ChiWNoiseStats = [] # list of chi-param stats from Sq data with noise
+        self.MDDataScale    = 0. # prefactor that scales the Sq calculated from RunSK.py
 
     def LoadSq(self,_filename):
         ''' Load in S(q) data. 
@@ -98,11 +100,14 @@ class RPA():
         '''
         _SqData = np.loadtxt(_filename)
         _temp_data = []
+        _temp_loadindexes = []
         for _i,val in enumerate(_SqData[:,0]):
             if val < self.qmaxFit and val > self.qminFit:
                 _temp_data.append([val,_SqData[_i,1]])
+                _temp_loadindexes.append(_i)
         print("Length of Sq_Data in Fit-range {0:4.4f} to {1:4.4f}: {2:}".format(self.qminFit,self.qmaxFit,len(_temp_data)))
         self.SqData = np.asarray(_temp_data)
+        self.MDSqDataIndices = _temp_loadindexes
     
     def SaveRPAObj(self,_name):
         ''' Generates JSON and Pickle backup files.
@@ -232,6 +237,7 @@ class RPA():
         bb = 1
 
         prefactor = 1./_vtot/(ba/_va-bb/_vb)**2
+        self.MDDataScale = prefactor
         SqData = np.loadtxt(SqMatrix)
         _colAA = 1 
         _colBB = 4
@@ -460,12 +466,18 @@ class RPA():
         
         return _gamma
         
-    def SqPS_Homopolymer_Predict(self,_q):
+    def SqPS_Homopolymer_Predict(self,_q,_IntA,_IntU,_rhos):
         ''' Calculate S(q) for Homopolymer Solution as predicted 
             from the microscopic model.
 
             Experimental Feature.
+
+            _q = wave vectors
+            _IntA = matrix of Gaussian interaction ranges 
+            _IntU = matrix of Gaussian interaction strengths
         
+            returns S_pp, S_ss, S_ps == S_sp normalized by Ntot; thus directly comparable to MD.
+
         '''
         
         if self.UseOmega:
@@ -478,31 +490,33 @@ class RPA():
             _suffix = 'CGCDebye'
         
         # TODO: Currently these are hardcoded, need to generalize
-        rhoP = 1000/7.122029**3
-        rhoS = 10000/7.122029**3
+        rhoP = _rhos[0]
+        rhoS = _rhos[1]
         _convert = 8*np.pi**(3/2)
-        app  = 0.375
-        ass  = 0.312
-        aps  = 0.345
-        upp  = 0.42967*_convert*app**3
-        uss  = 0.10000*_convert*ass**3
-        ups  = 0.21942*_convert*aps**3       
-        
-        
+        app  = _IntA[0,0]
+        ass  = _IntA[1,1]
+        aps  = _IntA[0,1]
+        upp  = _IntU[0,0]*_convert*app**3
+        uss  = _IntU[1,1]*_convert*ass**3
+        ups  = _IntU[0,1]*_convert*aps**3      
+                
         # S_PP(q)
         prefactor_AA = self.SpeciesData[0]['Nseg']*rhoP
         qRgAA = np.multiply(_q,self.SpeciesData[0]['Rg'])
         qRgAASq = np.multiply(qRgAA,qRgAA)
-        if self.UseOmega:
-            S_AA = prefactor_AA*self.OmegaData[0](_q)
-        elif self.UseDGC:
-            S_AA = prefactor_AA*self.gD_DGC(qRgAASq,self.SpeciesData[0]['Nseg'])
-        elif self.UseFJC:
-            S_AA = prefactor_AA*self.gD_FJC(qRgAASq,self.SpeciesData[0]['Nseg'])
+        # check if species 0 is a chain molecule. If so, add in the chain statistics.
+        if self.SpeciesData[0]['Nseg'] != 1:
+            if self.UseOmega:
+                S_AA = prefactor_AA*self.OmegaData[0](_q)
+            elif self.UseDGC:
+                S_AA = prefactor_AA*self.gD_DGC(qRgAASq,self.SpeciesData[0]['Nseg'])
+            elif self.UseFJC:
+                S_AA = prefactor_AA*self.gD_FJC(qRgAASq,self.SpeciesData[0]['Nseg'])
+            else:
+                S_AA = prefactor_AA*self.DebyeFnx(qRgAASq)
+            np.savetxt("S_PP_RPA_{}.dat".format(_suffix),np.column_stack((_q,S_AA)))
         else:
-            S_AA = prefactor_AA*self.DebyeFnx(qRgAASq)
-        
-        np.savetxt("S_PP_RPA_{}.dat".format(_suffix),np.column_stack((_q,S_AA)))
+            S_AA = prefactor_AA
         
         # S_SS(q)
         prefactor_BB = rhoS
@@ -522,12 +536,18 @@ class RPA():
         GammaPS = self.Gamma(_q,aps)
         
         # S(q) - combine         
-        _Sq_Den = (upp*GammaPP**2 + 1./S_AA)*(uss*GammaSS**2 + 1./S_BB) - (ups*GammaPS**2)**2
-        _Sq_Num = (uss*GammaSS**2 + 1./S_BB)        
+        #_Sq_Den = (upp*GammaPP**2 + 1./S_AA)*(uss*GammaSS**2 + 1./S_BB) - (ups*GammaPS**2)**2
+       
+        _Sq_Den = (1. + upp*GammaPP**2*S_AA + uss*GammaSS**2*S_BB + upp*GammaPP**2*uss*GammaSS**2*S_AA*S_BB - (ups*GammaPS**2)**2*S_AA*S_BB)
+        _Sq_Num_PP = (uss*GammaSS**2*S_AA*S_BB + S_AA)/np.sum(_rhos)
+        _Sq_Num_SS = (upp*GammaPP**2*S_AA*S_BB + S_BB)/np.sum(_rhos)
+        _Sq_Num_PS = (-1*ups*GammaPS**2)*S_AA*S_BB/np.sum(_rhos)
         
-        _SqPS_Homopolymer = _Sq_Num/_Sq_Den
-            
-        return _SqPS_Homopolymer
+        _SqPP_Homopolymer = _Sq_Num_PP/_Sq_Den
+        _SqSS_Homopolymer = _Sq_Num_SS/_Sq_Den
+        _SqPS_Homopolymer = _Sq_Num_PS/_Sq_Den
+        
+        return [_SqPP_Homopolymer, _SqSS_Homopolymer, _SqPS_Homopolymer]
         
                 
     def Pq_Homopolymer(self,_q,_Rg):
@@ -632,22 +652,28 @@ class RPA():
   
         return resid
         
-    def GenerateNoise(self,_StdDev,_NumberSamples,_ScaleAverage):
+    def GenerateNoise(self,_StdDev,_NumberSamples,_ScaleAverage,_StdDevIsList):
         ''' Generate noise from a random normal distribution.
             mu              = average Sq at each q-vector (here loc)
             _StdDev         = standard deviation (here scale), or what to scale
                                 mu by if _ScaleAverage == True.
             _NumberSamples  = number of samples to generate with noise
             _ScaleAverage   = if True, _StdDev = mu*_StdDev. Non-constant variance.
-
+            _StdDevIsList   = if True, uses the single _StdDev, otherwise
+                                _StdDev represents the standard-error around mean for each k-mode.
+                                If this is False, _ScaleAverage argument ignored.
         '''    
 
         _SqData2Fit = self.SqData
 
-        if _ScaleAverage:
-            _StdDevs = _SqData2Fit[:,1]*_StdDev
+        if _StdDevIsList:
+            if _ScaleAverage:
+                _StdDevs = _SqData2Fit[:,1]*_StdDev
+            else:
+                _StdDevs = np.asarray([_StdDev]*len(_SqData2Fit[:,1]))
         else:
-            _StdDevs = np.asarray([_StdDev]*len(_SqData2Fit[:,1]))
+            # the provided _StdDev already standard-error on the mean.
+            _StdDevs = _StdDev
 
         # each row is a new sample of Sq
         _SqDataWNoise = np.zeros((_NumberSamples,len(_SqData2Fit[:,1])))
@@ -720,24 +746,52 @@ class RPA():
     def EstChiSens2NoiseV2(self,_StdDev,_NumberSamples,_ScaleAverage):
         ''' Generate estimates of the sensitivity of chi fits to noise in MD data.
 
-           Here, _StdDev can be a list of values 
+            _StdDev can be either a list of values OR a .npy file.
         '''
+        GenerateNoiseFitPlots = True
+
+        # Decide if _StdDev a list or .npy file
+        if isinstance(_StdDev,list):
+            _StdDevIsList = True
+        elif isinstance(_StdDev,str):
+            _StdDevIsList = False
+            _StdDevFilename = _StdDev
+            _MDStatsData = np.loadtxt(_StdDevFilename,comments='#')
+            # Set the _StdDev list to the standard-errors from MD.
+            # The MDStatsData also scaled by the prefactor to convert to volume frac. and normalization.
+            _StdDev = [_MDStatsData[self.MDSqDataIndices,3]*self.MDDataScale]
+            print('Loaded in noise data from: {}'.format(_StdDevFilename))
+        else:
+            print('WARNING: StdDev type is not recognized! Must be either list or str of filename for S(k) stats file.')
 
         # Save SqData and reset after fitting
         _ActualSqData = self.SqData
         _q = _ActualSqData[:,0]
+        
+        # Check that the noise array and Sq data have same length 
+        if _StdDevIsList == False:
+            if len(_q) != _StdDev[0].shape[0]:
+                print('ERROR: The length of the Sq data from MD and the std. dev. array do not match!')
 
         # reset, thus this will override any already generated data
         self.ChiParamsWNoise = []
         self.RPASqWNoise = []
         self.ChiWNoiseStats = [] # list of list: [[stddev,avgchi,stdchi]]
 
+        # Generate directory for saving noise plots
+        if GenerateNoiseFitPlots:
+            NoiseFitPlotDir = 'NoiseFitPlots'
+            os.mkdir(NoiseFitPlotDir)
+
         # iterate over _StdDevVals in _StdDev list
         for _j,_StdDevVal in enumerate(_StdDev):
-            print('Generating noise for StdDev: {}...'.format(_StdDevVal))
-            
+            if _StdDevIsList:
+                print('Generating noise for StdDev: {}...'.format(_StdDevVal))
+            else:
+                print('Generating noise...')
+
             # Generate noise in the data
-            self.GenerateNoise(_StdDevVal,_NumberSamples,_ScaleAverage)
+            self.GenerateNoise(_StdDevVal,_NumberSamples,_ScaleAverage,_StdDevIsList)
             
             _temp_RPASqWNoise = []
             _temp_ChiParamsWNoise = []
@@ -757,6 +811,22 @@ class RPA():
                 _SqAB_Diblock = self.SqAB_Diblock(_q,_Chi) 
                 _temp_RPASqWNoise.append(_SqAB_Diblock)
 
+                if GenerateNoiseFitPlots:
+                    plt.plot(_ActualSqData[:,0],_ActualSqData[:,1],'ko',label='MD')
+                    plt.plot(_q,_SqAB_Diblock,'r-',label='RPA Omega')
+                    plt.annotate('Chi: {0:3.3e}'.format(_opt.x[0]),xy=(0.75,0.75), xycoords='axes fraction')
+                    plt.legend()
+                    plt.ylabel('S(k)')
+                    plt.xlabel('k [1/nm]')
+                    plt.savefig(os.path.join(NoiseFitPlotDir,'RPA_Noise_{}.png'.format(_i)),format='png')
+                    plt.close()
+
+            if _StdDevIsList:
+                _FileSuffix = _StdDevVal
+            else:
+                _FileSuffix = 'StdDevFromMD'
+                _StdDevVal = 0.0
+
             _ChiAvg = np.average(_temp_ChiParamsWNoise)
             _ChiStdDev = np.std(_temp_ChiParamsWNoise)
 
@@ -764,55 +834,76 @@ class RPA():
             _RPASqNoiseStd = np.std(np.asarray(_temp_RPASqWNoise),axis=0)
 
             _savename = self.SaveName.split('.')
-            savename = _savename[0]+'_Noise_StdDev_{}.'.format(_StdDevVal)+_savename[1]
+            savename = _savename[0]+'_Noise_StdDev_{}.'.format(_FileSuffix)+_savename[1]
             np.savetxt(savename,np.column_stack((_q,np.asarray(_temp_RPASqWNoise).transpose())))
-            savename = _savename[0]+'_Noise_Avg_StdDev_{}.'.format(_StdDevVal)+_savename[1]
+            savename = _savename[0]+'_Noise_Avg_StdDev_{}.'.format(_FileSuffix)+_savename[1]
             np.savetxt(savename,np.column_stack((_q,_RPASqNoiseAvg,_RPASqNoiseStd)))
+
+            if _StdDevIsList == False:
+                minChi = min(_temp_ChiParamsWNoise)
+                minChiIndex = _temp_ChiParamsWNoise.index(minChi)
+                maxChi = max(_temp_ChiParamsWNoise)
+                maxChiIndex = _temp_ChiParamsWNoise.index(maxChi)
+
+                savename = _savename[0]+'_Noise_min_chi_{}.'.format(_FileSuffix)+_savename[1]
+                np.savetxt(savename,np.column_stack((_q,np.asarray(_temp_RPASqWNoise).transpose()[:,minChiIndex])))
+                savename = _savename[0]+'_Noise_max_chi_{}.'.format(_FileSuffix)+_savename[1]
+                np.savetxt(savename,np.column_stack((_q,np.asarray(_temp_RPASqWNoise).transpose()[:,maxChiIndex])))
 
             self.RPASqWNoise.append(_temp_RPASqWNoise)
             self.ChiParamsWNoise.append(_temp_ChiParamsWNoise)
             self.ChiWNoiseStats.append([_StdDevVal,_ChiAvg,_ChiStdDev,self.ChiParams[0]])
+            
+            # reset self.SqData
+            self.SqData[:,1] = _ActualSqData[:,1]
 
         savename = _savename[0]+'_ChiStats.'+_savename[1]
+        _ChiStatsHeader = ' noise stddev (0.0 if from MD) || ChiAvg || ChiAvgStdDev || Chi w/o noise '
         _ChiStats = np.asarray(self.ChiWNoiseStats)
-        np.savetxt(savename,np.asarray(self.ChiWNoiseStats))
+        np.savetxt(savename,np.asarray(self.ChiWNoiseStats),header=_ChiStatsHeader)
+        
+        if _StdDevIsList == False:
+            print('ChiFit Avg. w/ Noise: {} +/- {}'.format(_ChiAvg,_ChiStdDev))
+            print('ChiFit min/max w/ Noise: {}/{} iter. {}/{}'.format(minChi,maxChi,minChiIndex,maxChiIndex))
 
-        # generate chi data plot
-        plt.errorbar(_ChiStats[:,0],_ChiStats[:,1],yerr=_ChiStats[:,2],fmt="ko-",markersize=5.,elinewidth=2.,ecolor='r')
-        plt.plot(_ChiStats[:,0],_ChiStats[:,3],'b-')
-        plt.legend()
-        plt.ylabel('$\chi$')
-        plt.xlabel('$\sigma$')
-        plt.savefig((_savename[0]+'_Chi_Noise.png'),format='png')
-        plt.close()
+        print('Done with noise analysis.')
+        print(' ')
 
-        plt.semilogx(_ChiStats[:,0],_ChiStats[:,1],"ko-",markersize=5.)
-        plt.semilogx(_ChiStats[:,0],_ChiStats[:,3],'b-')
-        plt.errorbar(_ChiStats[:,0],_ChiStats[:,1],yerr=_ChiStats[:,2],fmt="ko-",markersize=5.,elinewidth=2.,ecolor='r')
-        plt.legend()
-        plt.ylabel('$\chi$')
-        plt.xlabel('$\sigma$')
-        plt.savefig((_savename[0]+'_Chi_Noise_semilogx.png'),format='png')
-        plt.close()
+        # generate plots
+        if _StdDevIsList:
+            # generate chi data plot
+            plt.errorbar(_ChiStats[:,0],_ChiStats[:,1],yerr=_ChiStats[:,2],fmt="ko-",markersize=5.,elinewidth=2.,ecolor='r')
+            plt.plot(_ChiStats[:,0],_ChiStats[:,3],'b-')
+            plt.legend()
+            plt.ylabel('$\chi$')
+            plt.xlabel('$\sigma$')
+            plt.savefig((_savename[0]+'_Chi_Noise.png'),format='png')
+            plt.close()
 
-        plt.semilogx(_ChiStats[:,0],np.abs(_ChiStats[:,2]/_ChiStats[:,1]),"ko-",markersize=5.,label='chi')
-        plt.semilogx(_ChiStats[:,0],np.abs(_ChiStats[:,2]/_ChiStats[:,3]),'b-',label='base chi')
-        plt.legend()
-        plt.ylabel('$\sigma/|\chi|$')
-        plt.xlabel('$\sigma$')
-        plt.savefig((_savename[0]+'_StdDevNorm_Noise_semilogx.png'),format='png')
-        plt.close()
+            plt.semilogx(_ChiStats[:,0],_ChiStats[:,1],"ko-",markersize=5.)
+            plt.semilogx(_ChiStats[:,0],_ChiStats[:,3],'b-')
+            plt.errorbar(_ChiStats[:,0],_ChiStats[:,1],yerr=_ChiStats[:,2],fmt="ko-",markersize=5.,elinewidth=2.,ecolor='r')
+            plt.legend()
+            plt.ylabel('$\chi$')
+            plt.xlabel('$\sigma$')
+            plt.savefig((_savename[0]+'_Chi_Noise_semilogx.png'),format='png')
+            plt.close()
 
-        plt.loglog(_ChiStats[:,0],np.abs(_ChiStats[:,2]/_ChiStats[:,1]),"ko-",markersize=5.,label='chi')
-        plt.loglog(_ChiStats[:,0],np.abs(_ChiStats[:,2]/_ChiStats[:,3]),'b-',label='base chi')
-        plt.legend()
-        plt.ylabel('$\sigma/|\chi|$')
-        plt.xlabel('$\sigma$')
-        plt.savefig((_savename[0]+'_StdDevNorm_Noise_loglog.png'),format='png')
-        plt.close()
+            plt.semilogx(_ChiStats[:,0],np.abs(_ChiStats[:,2]/_ChiStats[:,1]),"ko-",markersize=5.,label='chi')
+            plt.semilogx(_ChiStats[:,0],np.abs(_ChiStats[:,2]/_ChiStats[:,3]),'b-',label='base chi')
+            plt.legend()
+            plt.ylabel('$\sigma/|\chi|$')
+            plt.xlabel('$\sigma$')
+            plt.savefig((_savename[0]+'_StdDevNorm_Noise_semilogx.png'),format='png')
+            plt.close()
 
-        # reset self.SqData
-        self.SqData[:,1] = _ActualSqData[:,1]
+            plt.loglog(_ChiStats[:,0],np.abs(_ChiStats[:,2]/_ChiStats[:,1]),"ko-",markersize=5.,label='chi')
+            plt.loglog(_ChiStats[:,0],np.abs(_ChiStats[:,2]/_ChiStats[:,3]),'b-',label='base chi')
+            plt.legend()
+            plt.ylabel('$\sigma/|\chi|$')
+            plt.xlabel('$\sigma$')
+            plt.savefig((_savename[0]+'_StdDevNorm_Noise_loglog.png'),format='png')
+            plt.close()
 
     def FitRPA(self,UseNoise=False,StdDev=[0.01],NumberSamples=100,ScaleAverage=True):
         ''' Fit RPA model to S(q) data. 
