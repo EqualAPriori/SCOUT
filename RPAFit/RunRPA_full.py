@@ -31,7 +31,7 @@ showfigs = False
 vtotset = 1629.22871655/(235.*40.) # nm**3/seg. in the MD simulation
 # Flags for flipping the total Sq and/or the Omega data
 TotalSqLikeFlipped = False
-OmegaLikeFlipped = True
+OmegaLikeFlipped = False
 # File name for backup (.json and .pickle)
 _backupfilename = 'backup'#'T_225_L_008_nPS_020_npmPS_020_NPT'
 
@@ -68,13 +68,13 @@ for _i, _scale in enumerate(scalef):
         _fa = float(_Na)/float(_Na+_Nb)
         _fb = (1.-_fa)
         
-        b_a = 0.942/np.sqrt(20) # Rg PS melt from 20mer
+        b_a = 0.942/np.sqrt(20./6.) # Rg PS melt from 20mer
         if _param == 'b_a': b_a = b_a*_scale
-        b_b = 0.970/np.sqrt(20) # Rg pmPS melt from 20mer
+        b_b = 0.970/np.sqrt(20./6.) # Rg pmPS melt from 20mer
         if _param == 'b_b': b_b = b_b*_scale
         
-        Rg_a = b_a*_Na**(0.5)
-        Rg_b = b_b*_Nb**(0.5)
+        Rg_a = b_a*(_Na/6.)**(0.5)
+        Rg_b = b_b*(_Nb/6.)**(0.5)
         
         
         
